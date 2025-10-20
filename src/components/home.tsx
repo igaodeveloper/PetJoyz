@@ -1,9 +1,11 @@
+import React from 'react';
 import Footer from './Footer';
 import ProductCard from './ProductCard';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Award, Leaf, Shield } from 'lucide-react';
+import { motion } from 'framer-motion';
 import productsData from '../data/products.json';
 import categoriesData from '../data/categories.json';
 
@@ -46,16 +48,53 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Visual */}
-            <div className="relative hidden lg:block">
-              <div className="relative w-full h-96">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-aqua-mint/30 rounded-full blur-3xl animate-blink"></div>
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-joy-orange/30 rounded-full blur-3xl"></div>
-                <div className="relative z-10 flex items-center justify-center h-full">
-                  <div className="text-9xl animate-bounce-subtle">🐕</div>
-                </div>
-              </div>
-            </div>
+            {/* Right Visual - Pet Image with Animation */}
+            <motion.div 
+              className="hidden lg:flex items-center justify-center p-4"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+            >
+              <motion.div 
+                className="overflow-hidden rounded-3xl bg-white/50 p-2 shadow-2xl"
+                whileHover={{ 
+                  scale: 1.02,
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <motion.img 
+                  src="/images/pet.png" 
+                  alt="Pet feliz" 
+                  className="w-full h-auto max-h-[32rem] object-cover rounded-2xl"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ 
+                    opacity: 1, 
+                    scale: 1,
+                    y: [0, -10, 0],
+                  }}
+                  transition={{ 
+                    duration: 8,
+                    repeat: Infinity,
+                    repeatType: 'reverse',
+                    ease: 'easeInOut'
+                  }}
+                />
+                <motion.div 
+                  className="absolute inset-0 rounded-2xl border-2 border-joy-orange/30 pointer-events-none"
+                  initial={{ opacity: 0 }}
+                  animate={{ 
+                    opacity: [0, 0.3, 0],
+                    scale: [1, 1.1, 1.2]
+                  }}
+                  transition={{ 
+                    duration: 4,
+                    repeat: Infinity,
+                    repeatType: 'loop',
+                    ease: 'easeOut'
+                  }}
+                />
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>
