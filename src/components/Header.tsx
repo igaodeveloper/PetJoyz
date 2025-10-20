@@ -48,6 +48,48 @@ const buttonTap = {
   scale: 0.95
 };
 
+const searchBarVariants = {
+  hidden: { 
+    width: 40, 
+    opacity: 0.8,
+    x: 10
+  },
+  visible: {
+    width: 300,
+    opacity: 1,
+    x: 0,
+    transition: { 
+      type: 'spring', 
+      stiffness: 300, 
+      damping: 25,
+      mass: 0.5
+    }
+  },
+  exit: {
+    width: 40,
+    opacity: 0,
+    x: 10,
+    transition: {
+      type: 'spring',
+      stiffness: 300,
+      damping: 30
+    }
+  }
+};
+
+const searchButtonVariants = {
+  initial: { scale: 1 },
+  hover: { 
+    scale: 1.1,
+    rotate: 10,
+    transition: { type: 'spring', stiffness: 500, damping: 10 }
+  },
+  tap: { 
+    scale: 0.9,
+    transition: { type: 'spring', stiffness: 500, damping: 10 }
+  }
+};
+
 const menuVariants = {
   open: { 
     opacity: 1,
@@ -200,46 +242,68 @@ export default function Header() {
               initial="hidden"
               animate="visible"
             >
-              {isSearchOpen ? (
-                <motion.form
-                  className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-lg rounded-full pl-4 pr-2 py-1 flex items-center z-50"
-                  initial={{ width: 0, opacity: 0, x: 20 }}
-                  animate={{ width: 300, opacity: 1, x: 0 }}
-                  exit={{ width: 0, opacity: 0, x: 20 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  onSubmit={handleSearch}
-                >
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Buscar produtos..."
-                    className="w-full bg-transparent border-none outline-none text-deep-navy placeholder-deep-navy/60"
-                  />
-                  <Button
-                    type="submit"
-                    variant="ghost"
-                    size="icon"
-                    className="text-deep-navy hover:text-joy-orange h-8 w-8"
-                    aria-label="Buscar"
+              <AnimatePresence mode="wait">
+                {isSearchOpen ? (
+                  <motion.form
+                    className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-lg rounded-full pl-4 pr-2 py-1 flex items-center z-50 overflow-hidden border border-joy-orange/20"
+                    variants={searchBarVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    onSubmit={handleSearch}
+                    key="search-form"
                   >
-                    <SearchIcon className="h-4 w-4" />
-                  </Button>
-                </motion.form>
-              ) : (
-                <motion.div whileHover={buttonHover} whileTap={buttonTap}>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-deep-navy hover:text-joy-orange"
-                    aria-label="Abrir busca"
-                    onClick={handleSearchClick}
+                    <motion.div 
+                      className="w-full"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.15 }}
+                    >
+                      <input
+                        ref={searchInputRef}
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Buscar produtos..."
+                        className="w-full bg-transparent border-none outline-none text-deep-navy placeholder-deep-navy/60 focus:placeholder-transparent transition-all duration-200"
+                      />
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="ml-1"
+                    >
+                      <Button
+                        type="submit"
+                        variant="ghost"
+                        size="icon"
+                        className="text-joy-orange hover:bg-joy-orange/10 h-8 w-8 rounded-full"
+                        aria-label="Buscar"
+                      >
+                        <SearchIcon className="h-4 w-4" />
+                      </Button>
+                    </motion.div>
+                  </motion.form>
+                ) : (
+                  <motion.div 
+                    key="search-button"
+                    variants={searchButtonVariants}
+                    initial="initial"
+                    whileHover="hover"
+                    whileTap="tap"
                   >
-                    <Search className="h-5 w-5" />
-                  </Button>
-                </motion.div>
-              )}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-deep-navy hover:text-joy-orange hover:bg-joy-orange/10"
+                      aria-label="Abrir busca"
+                      onClick={handleSearchClick}
+                    >
+                      <Search className="h-5 w-5" />
+                    </Button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
 
             <motion.div 
