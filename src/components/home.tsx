@@ -56,7 +56,7 @@ export default function Home() {
               transition={{ duration: 0.8, ease: 'easeOut' }}
             >
               <motion.div 
-                className="overflow-hidden rounded-3xl bg-white/50 p-2 shadow-2xl"
+                className="overflow-hidden rounded-3xl bg-white/50 p-2 shadow-2xl relative"
                 whileHover={{ 
                   scale: 1.02,
                   transition: { duration: 0.3 }
@@ -66,31 +66,18 @@ export default function Home() {
                   src="/images/pet.png" 
                   alt="Pet feliz" 
                   className="w-full h-auto max-h-[32rem] object-cover rounded-2xl"
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ 
                     opacity: 1, 
                     scale: 1,
-                    y: [0, -10, 0],
                   }}
                   transition={{ 
-                    duration: 4,
-                    repeat: Infinity,
-                    repeatType: 'reverse',
-                    ease: 'easeInOut'
+                    duration: 0.5,
+                    ease: 'easeOut'
                   }}
-                />
-                <motion.div 
-                  className="absolute inset-0 rounded-2xl border-2 border-joy-orange/30 pointer-events-none"
-                  initial={{ opacity: 0 }}
-                  animate={{ 
-                    opacity: [0, 0.2, 0],
-                    scale: [1, 1.05, 1.1]
-                  }}
-                  transition={{ 
-                    duration: 1,
-                    repeat: Infinity,
-                    repeatType: 'loop',
-                    ease: 'easeInOut'
+                  whileHover={{
+                    scale: 1.03,
+                    transition: { duration: 0.3 }
                   }}
                 />
               </motion.div>
