@@ -37,13 +37,15 @@ export default function Home() {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-deep-navy text-deep-navy hover:bg-deep-navy hover:text-white text-lg px-8 py-6 rounded-petjoy transition-all duration-300"
-                >
-                  Ver Ofertas
-                </Button>
+                <Link to="/ofertas">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-2 border-deep-navy text-deep-navy hover:bg-deep-navy hover:text-white text-lg px-8 py-6 rounded-petjoy transition-all duration-300"
+                  >
+                    Ver Ofertas
+                  </Button>
+                </Link>
               </div>
             </div>
 

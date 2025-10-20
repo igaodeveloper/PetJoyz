@@ -9,10 +9,13 @@ interface ProductCardProps {
   title: string;
   slug: string;
   price: number;
+  originalPrice?: number;
+  discount?: number;
   images: string[];
   rating: number;
   reviewCount: number;
   badges?: string[];
+  showDiscountBadge?: boolean;
 }
 
 export default function ProductCard({
@@ -20,10 +23,13 @@ export default function ProductCard({
   title,
   slug,
   price,
+  originalPrice,
+  discount = 0,
   images,
   rating,
   reviewCount,
   badges = [],
+  showDiscountBadge = false,
 }: ProductCardProps) {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -42,24 +48,25 @@ export default function ProductCard({
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
           />
-          {badges.length > 0 && (
-            <div className="absolute top-3 left-3 flex flex-col gap-2">
-              {badges.map((badge) => (
-                <Badge
-                  key={badge}
-                  className={`${
-                    badge === 'Top PetJoy'
-                      ? 'bg-peach-blush text-deep-navy'
-                      : badge === 'Eco'
-                      ? 'bg-forest-green text-white'
-                      : 'bg-aqua-mint text-white'
-                  } font-medium`}
-                >
-                  {badge}
-                </Badge>
-              ))}
-            </div>
-          )}
+          <div className="absolute top-3 left-3 flex flex-col gap-2">
+            {showDiscountBadge && discount > 0 && (
+              <Badge className="bg-coral-red text-white text-sm font-bold">
+                {Math.round(discount)}% OFF
+              </Badge>
+            )}
+            {badges.map((badge) => (
+              <Badge
+                key={badge}
+                className={`${
+                  badge === 'Novo'
+                    ? 'bg-joy-orange text-white'
+                    : 'bg-deep-navy text-white'
+                }`}
+              >
+                {badge}
+              </Badge>
+            ))}
+          </div>
         </div>
       </Link>
 
@@ -85,9 +92,18 @@ export default function ProductCard({
         </div>
 
         <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold text-joy-orange">
-            {formatPrice(price)}
-          </span>
+          <div className="mt-3">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-deep-navy">
+                {formatPrice(price)}
+              </span>
+              {showDiscountBadge && originalPrice && originalPrice > price && (
+                <span className="text-sm text-forest-green line-through">
+                  {formatPrice(originalPrice)}
+                </span>
+              )}
+            </div>
+          </div>
           <Button
             size="sm"
             className="bg-joy-orange hover:bg-aqua-mint text-white rounded-petjoy transition-all duration-300"
