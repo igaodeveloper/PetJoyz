@@ -65,11 +65,18 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [wishlistCount, setWishlistCount] = useState(0);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const { cart, getCartCount } = useCart();
   const cartCount = getCartCount();
   const navigate = useNavigate();
+
+  // Simulate wishlist count (replace with actual wishlist logic)
+  useEffect(() => {
+    // In a real app, you would fetch this from your wishlist context or API
+    setWishlistCount(3); // Example count
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -243,14 +250,34 @@ export default function Header() {
               )}
             </motion.div>
 
-            <motion.div whileHover={buttonHover} whileTap={buttonTap} className="hidden md:flex">
+            <motion.div 
+              whileHover={buttonHover} 
+              whileTap={buttonTap}
+              className="relative hidden md:flex"
+            >
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-deep-navy hover:text-joy-orange"
+                className="text-deep-navy hover:text-joy-orange relative"
                 aria-label="Favoritos"
+                onClick={() => navigate('/favoritos')}
               >
                 <Heart className="h-5 w-5" />
+                <AnimatePresence>
+                  {wishlistCount > 0 && (
+                    <motion.span
+                      key="wishlist-badge"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      className="absolute -top-1 -right-1"
+                    >
+                      <Badge className="h-5 w-5 flex items-center justify-center p-0 bg-coral-red text-white text-xs">
+                        {wishlistCount}
+                      </Badge>
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </Button>
             </motion.div>
 
@@ -347,6 +374,20 @@ export default function Header() {
                         initial={{ x: 20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.1 * menuItems.length }}
+                        whileHover={{ x: 5 }}
+                      >
+                        <Link
+                          to="/favoritos"
+                          className="text-lg font-medium text-deep-navy hover:text-joy-orange transition-colors py-2 inline-flex items-center gap-2"
+                        >
+                          <Heart className="h-5 w-5" />
+                          Favoritos {wishlistCount > 0 && `(${wishlistCount})`}
+                        </Link>
+                      </motion.div>
+                      <motion.div
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.1 * (menuItems.length + 1) }}
                         whileHover={{ x: 5 }}
                       >
                         <Link
