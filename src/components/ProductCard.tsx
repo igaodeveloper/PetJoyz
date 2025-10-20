@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Star, ShoppingCart } from 'lucide-react';
+import { Star, ShoppingCart, Check } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
+import { useCart } from '@/hooks/useCart';
+import { useState } from 'react';
 
 interface ProductCardProps {
   id: string;
@@ -38,9 +40,26 @@ export default function ProductCard({
     }).format(price / 100);
   };
 
+  const { addToCart, getItemQuantity } = useCart();
+  const [isAdded, setIsAdded] = useState(false);
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    addToCart({
+      id,
+      name: title,
+      price: price,
+      image: images[0],
+    });
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 2000);
+  };
+
+  const quantityInCart = getItemQuantity(id);
+
   return (
     <Card className="group overflow-hidden border-0 shadow-petjoy-soft hover:shadow-petjoy-crisp transition-all duration-300 hover:-translate-y-1.5 bg-white">
-      <Link to={`/produto/${slug}`}>
+      <Link to={`/produto/${slug}`} className="block">
         <div className="relative overflow-hidden aspect-square bg-soft-cream">
           <img
             src={images[0]}
@@ -71,8 +90,8 @@ export default function ProductCard({
       </Link>
 
       <CardContent className="p-4">
-        <Link to={`/produto/${slug}`}>
-          <h3 className="font-primary font-semibold text-deep-navy mb-2 line-clamp-2 group-hover:text-joy-orange transition-colors">
+        <Link to={`/produto/${slug}`} className="block mb-2">
+          <h3 className="font-primary font-semibold text-deep-navy line-clamp-2 group-hover:text-joy-orange transition-colors">
             {title}
           </h3>
         </Link>
@@ -92,24 +111,27 @@ export default function ProductCard({
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="mt-3">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-deep-navy">
-                {formatPrice(price)}
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-deep-navy">
+              {formatPrice(price)}
+            </span>
+            {showDiscountBadge && originalPrice && originalPrice > price && (
+              <span className="text-sm text-forest-green line-through">
+                {formatPrice(originalPrice)}
               </span>
-              {showDiscountBadge && originalPrice && originalPrice > price && (
-                <span className="text-sm text-forest-green line-through">
-                  {formatPrice(originalPrice)}
-                </span>
-              )}
-            </div>
+            )}
           </div>
           <Button
+            onClick={handleAddToCart}
+            className={`${isAdded ? 'bg-green-500 hover:bg-green-600' : 'bg-joy-orange hover:bg-joy-orange/90'} text-white transition-colors`}
             size="sm"
-            className="bg-joy-orange hover:bg-aqua-mint text-white rounded-petjoy transition-all duration-300"
           >
-            <ShoppingCart className="h-4 w-4 mr-1" />
-            Adicionar
+            {isAdded ? (
+              <Check className="h-4 w-4 mr-1" />
+            ) : (
+              <ShoppingCart className="h-4 w-4 mr-1" />
+            )}
+            {isAdded ? 'Adicionado' : quantityInCart > 0 ? `(${quantityInCart})` : 'Adicionar'}
           </Button>
         </div>
       </CardContent>
