@@ -3,6 +3,7 @@ import Footer from './Footer';
 import ProductCard from './ProductCard';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Award, Leaf, Shield } from 'lucide-react';
 import productsData from '../data/products.json';
 import categoriesData from '../data/categories.json';
@@ -27,13 +28,15 @@ export default function Home() {
                 Produtos selecionados com carinho para transformar cada momento com seu melhor amigo em pura diversão e amor.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button
-                  size="lg"
-                  className="bg-joy-orange hover:bg-aqua-mint text-white text-lg px-8 py-6 rounded-petjoy shadow-petjoy-crisp hover:-translate-y-1 transition-all duration-300"
-                >
-                  Explorar Produtos
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <Link to="/produtos">
+                  <Button
+                    size="lg"
+                    className="bg-joy-orange hover:bg-aqua-mint text-white text-lg px-8 py-6 rounded-petjoy shadow-petjoy-crisp hover:-translate-y-1 transition-all duration-300"
+                  >
+                    Explorar Produtos
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
                 <Button
                   size="lg"
                   variant="outline"

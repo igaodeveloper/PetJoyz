@@ -1,0 +1,14 @@
+{
+  "brands": [
+    { "id": "rc", "name": "Royal Canin", "count": 24 },
+    { "id": "hills", "name": "Hills Science Diet", "count": 18 },
+    { "id": "purina", "name": "Purina Pro Plan", "count": 32 },
+    { "id": "eukanuba", "name": "Eukanuba", "count": 15 },
+    { "id": "acana", "name": "Acana", "count": 12 },
+    { "id": "orijen", "name": "Orijen", "count": 10 },
+    { "id": "whiskas", "name": "Whiskas", "count": 20 },
+    { "id": "iams", "name": "Iams", "count": 15 },
+    { "id": "pedigree", "name": "Pedigree", "count": 25 },
+    { "id": "friskies", "name": "Friskies", "count": 22 }
+  ]
+}
