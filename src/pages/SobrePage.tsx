@@ -180,14 +180,10 @@ export default function SobrePage() {
               <motion.div variants={fadeIn} className="relative">
                 <div className="relative rounded-2xl overflow-hidden shadow-xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1583337130417-3346c2c6eade?q=80&w=2574&auto=format&fit=crop" 
+                    src="/images/pet.png" 
                     alt="Nossa equipe" 
                     className="w-full h-auto"
                   />
-                  <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-lg">
-                    <div className="text-3xl font-bold text-joy-orange">+10K</div>
-                    <div className="text-sm text-gray-600">Clientes Felizes</div>
-                  </div>
                 </div>
               </motion.div>
 
@@ -201,11 +197,6 @@ export default function SobrePage() {
                 <p className="text-lg text-gray-700">
                   Hoje, somos uma equipe apaixonada que trabalha incansavelmente para oferecer os melhores produtos e serviços, sempre com foco no bem-estar animal e na satisfação dos nossos clientes.
                 </p>
-                <div className="pt-4">
-                  <Button className="bg-joy-orange hover:bg-aqua-mint text-white">
-                    Conheça nossa história completa
-                  </Button>
-                </div>
               </motion.div>
             </div>
           </motion.div>
