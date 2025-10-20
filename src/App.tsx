@@ -10,6 +10,7 @@ import CartPage from "./pages/CartPage";
 import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
 import FavoritosPage from "./pages/FavoritosPage";
+import PaymentPage from "./pages/PaymentPage";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/ofertas" element={<OfertasPage />} />
           <Route path="/sobre" element={<SobrePage />} />
           <Route path="/carrinho" element={<CartPage />} />
+          <Route path="/pagamento" element={<PaymentPage />} />
           <Route path="/favoritos" element={<FavoritosPage />} />
           <Route path="/produto/:slug" element={<ProductDetail />} />
           <Route path="/categoria/:slug" element={<CategoryPage />} />

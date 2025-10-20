@@ -153,9 +153,11 @@ export default function CartPage() {
                 </span>
               </div>
               
-              <Button className="w-full mt-6 bg-joy-orange hover:bg-aqua-mint text-white h-12 text-lg">
-                Finalizar Compra
-              </Button>
+              <Link to="/pagamento" className="w-full block">
+                <Button className="w-full mt-6 bg-joy-orange hover:bg-joy-orange/90 text-white h-12 text-lg">
+                  Finalizar Compra
+                </Button>
+              </Link>
               
               <div className="mt-4 text-center">
                 <Link 
