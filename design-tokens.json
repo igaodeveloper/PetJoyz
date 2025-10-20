@@ -1,0 +1,39 @@
+{
+  "colors": {
+    "joy-orange": "#FF9A3D",
+    "aqua-mint": "#4FD1C5",
+    "deep-navy": "#1F2E45",
+    "soft-cream": "#FFF7E6",
+    "peach-blush": "#FFD5A5",
+    "forest-green": "#3C8D63",
+    "coral-red": "#FF6B6B",
+    "green-mint": "#48BB78"
+  },
+  "typography": {
+    "font-primary": "Poppins, sans-serif",
+    "font-secondary": "Nunito, sans-serif",
+    "h1": "48px",
+    "h2": "34px",
+    "h3": "24px",
+    "body": "16px",
+    "small": "14px"
+  },
+  "spacing": {
+    "xxs": "4px",
+    "xs": "8px",
+    "sm": "12px",
+    "md": "16px",
+    "lg": "24px",
+    "xl": "32px",
+    "2xl": "48px"
+  },
+  "radius": {
+    "small": "6px",
+    "default": "12px",
+    "pill": "9999px"
+  },
+  "shadows": {
+    "soft": "0 6px 20px rgba(31,46,69,0.06)",
+    "crisp": "0 8px 30px rgba(31,46,69,0.08)"
+  }
+}

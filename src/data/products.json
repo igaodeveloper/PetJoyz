@@ -1,0 +1,255 @@
+[
+  {
+    "id": "1",
+    "title": "Bola Anti-Tédio Interativa",
+    "slug": "bola-anti-tedio-interativa",
+    "description": "Bola de borracha resistente com textura massageadora que mantém seu pet entretido por horas. Perfeita para cães de todos os portes!",
+    "price": 4990,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80",
+      "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&q=80"
+    ],
+    "category": "brinquedos",
+    "badges": ["Top PetJoy", "Eco"],
+    "tags": ["cães", "resistente", "interativo"],
+    "rating": 4.8,
+    "reviewCount": 127,
+    "stock": 45,
+    "variants": [
+      { "size": "P", "color": "Azul" },
+      { "size": "M", "color": "Azul" },
+      { "size": "G", "color": "Azul" }
+    ]
+  },
+  {
+    "id": "2",
+    "title": "Arranhador Torre Luxo",
+    "slug": "arranhador-torre-luxo",
+    "description": "Torre de arranhador com 3 níveis, ideal para gatos que adoram escalar. Material eco-friendly e super resistente.",
+    "price": 29990,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1545249390-6bdfa286032f?w=800&q=80",
+      "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800&q=80"
+    ],
+    "category": "acessorios",
+    "badges": ["Eco", "Novo"],
+    "tags": ["gatos", "arranhador", "torre"],
+    "rating": 4.9,
+    "reviewCount": 89,
+    "stock": 12,
+    "variants": [
+      { "size": "Único", "color": "Bege" }
+    ]
+  },
+  {
+    "id": "3",
+    "title": "Petiscos Naturais Frango",
+    "slug": "petiscos-naturais-frango",
+    "description": "Petiscos 100% naturais de frango desidratado. Sem conservantes, perfeito para treinos e recompensas.",
+    "price": 2490,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=800&q=80"
+    ],
+    "category": "petiscos",
+    "badges": ["Top PetJoy"],
+    "tags": ["cães", "natural", "treino"],
+    "rating": 4.7,
+    "reviewCount": 203,
+    "stock": 156,
+    "variants": [
+      { "size": "100g", "color": null },
+      { "size": "250g", "color": null }
+    ]
+  },
+  {
+    "id": "4",
+    "title": "Cama Nuvem Confort",
+    "slug": "cama-nuvem-confort",
+    "description": "Cama ultra macia com enchimento de fibra siliconada. Seu pet vai adorar essa nuvem de conforto!",
+    "price": 15990,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800&q=80"
+    ],
+    "category": "acessorios",
+    "badges": ["Top PetJoy"],
+    "tags": ["cães", "gatos", "cama", "conforto"],
+    "rating": 4.9,
+    "reviewCount": 156,
+    "stock": 34,
+    "variants": [
+      { "size": "P", "color": "Cinza" },
+      { "size": "M", "color": "Cinza" },
+      { "size": "G", "color": "Cinza" }
+    ]
+  },
+  {
+    "id": "5",
+    "title": "Mordedor Dental Menta",
+    "slug": "mordedor-dental-menta",
+    "description": "Mordedor com textura especial para limpeza dental e aroma de menta. Mantém os dentes limpos e o hálito fresco!",
+    "price": 3490,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1623387641168-d9803ddd3f35?w=800&q=80"
+    ],
+    "category": "brinquedos",
+    "badges": ["Novo"],
+    "tags": ["cães", "dental", "saúde"],
+    "rating": 4.6,
+    "reviewCount": 78,
+    "stock": 67,
+    "variants": [
+      { "size": "Único", "color": "Verde" }
+    ]
+  },
+  {
+    "id": "6",
+    "title": "Coleira Ajustável Premium",
+    "slug": "coleira-ajustavel-premium",
+    "description": "Coleira ajustável com fecho de segurança e material refletivo. Conforto e segurança para passeios noturnos.",
+    "price": 5990,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1601758125946-6ec2ef64daf8?w=800&q=80"
+    ],
+    "category": "acessorios",
+    "badges": ["Top PetJoy"],
+    "tags": ["cães", "passeio", "segurança"],
+    "rating": 4.8,
+    "reviewCount": 142,
+    "stock": 89,
+    "variants": [
+      { "size": "P", "color": "Laranja" },
+      { "size": "M", "color": "Laranja" },
+      { "size": "G", "color": "Laranja" }
+    ]
+  },
+  {
+    "id": "7",
+    "title": "Comedouro Inteligente",
+    "slug": "comedouro-inteligente",
+    "description": "Comedouro com design anti-voracidade que ajuda na digestão. Perfeito para pets que comem muito rápido!",
+    "price": 7990,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1591769225440-811ad7d6eab3?w=800&q=80"
+    ],
+    "category": "acessorios",
+    "badges": ["Novo"],
+    "tags": ["cães", "gatos", "alimentação"],
+    "rating": 4.7,
+    "reviewCount": 94,
+    "stock": 56,
+    "variants": [
+      { "size": "P", "color": "Azul" },
+      { "size": "M", "color": "Azul" }
+    ]
+  },
+  {
+    "id": "8",
+    "title": "Brinquedo Corda Dental",
+    "slug": "brinquedo-corda-dental",
+    "description": "Corda resistente para brincadeiras de cabo de guerra. Ajuda na limpeza dos dentes enquanto diverte!",
+    "price": 2990,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1615751072497-5f5169febe17?w=800&q=80"
+    ],
+    "category": "brinquedos",
+    "badges": ["Top PetJoy"],
+    "tags": ["cães", "corda", "dental"],
+    "rating": 4.5,
+    "reviewCount": 167,
+    "stock": 123,
+    "variants": [
+      { "size": "M", "color": "Colorido" },
+      { "size": "G", "color": "Colorido" }
+    ]
+  },
+  {
+    "id": "9",
+    "title": "Petiscos Salmão Premium",
+    "slug": "petiscos-salmao-premium",
+    "description": "Petiscos de salmão desidratado, rico em ômega 3. Ideal para pelagem brilhante e saúde do coração.",
+    "price": 3490,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1589941013453-ec89f33b5e95?w=800&q=80"
+    ],
+    "category": "petiscos",
+    "badges": ["Top PetJoy", "Eco"],
+    "tags": ["cães", "gatos", "salmão", "premium"],
+    "rating": 4.9,
+    "reviewCount": 234,
+    "stock": 178,
+    "variants": [
+      { "size": "100g", "color": null },
+      { "size": "250g", "color": null }
+    ]
+  },
+  {
+    "id": "10",
+    "title": "Casinha Iglu Térmica",
+    "slug": "casinha-iglu-termica",
+    "description": "Casinha térmica que mantém a temperatura ideal. Perfeita para todas as estações do ano!",
+    "price": 24990,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80"
+    ],
+    "category": "acessorios",
+    "badges": ["Novo"],
+    "tags": ["cães", "gatos", "casinha", "térmica"],
+    "rating": 4.8,
+    "reviewCount": 67,
+    "stock": 23,
+    "variants": [
+      { "size": "P", "color": "Cinza" },
+      { "size": "M", "color": "Cinza" }
+    ]
+  },
+  {
+    "id": "11",
+    "title": "Bolinha Luminosa LED",
+    "slug": "bolinha-luminosa-led",
+    "description": "Bola com LED que acende ao movimento. Diversão garantida mesmo à noite!",
+    "price": 5490,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1535294435445-d7249524ef2e?w=800&q=80"
+    ],
+    "category": "brinquedos",
+    "badges": ["Novo"],
+    "tags": ["cães", "LED", "noturno"],
+    "rating": 4.6,
+    "reviewCount": 112,
+    "stock": 87,
+    "variants": [
+      { "size": "Único", "color": "Azul" }
+    ]
+  },
+  {
+    "id": "12",
+    "title": "Kit Higiene Completo",
+    "slug": "kit-higiene-completo",
+    "description": "Kit com escova, cortador de unhas, shampoo e condicionador. Tudo para manter seu pet sempre lindo!",
+    "price": 12990,
+    "currency": "BRL",
+    "images": [
+      "https://images.unsplash.com/photo-1581888227599-779811939961?w=800&q=80"
+    ],
+    "category": "acessorios",
+    "badges": ["Top PetJoy"],
+    "tags": ["cães", "gatos", "higiene", "kit"],
+    "rating": 4.7,
+    "reviewCount": 189,
+    "stock": 45,
+    "variants": [
+      { "size": "Único", "color": null }
+    ]
+  }
+]
