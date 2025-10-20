@@ -73,7 +73,7 @@ export default function Home() {
                     y: [0, -10, 0],
                   }}
                   transition={{ 
-                    duration: 8,
+                    duration: 4,
                     repeat: Infinity,
                     repeatType: 'reverse',
                     ease: 'easeInOut'
@@ -83,14 +83,14 @@ export default function Home() {
                   className="absolute inset-0 rounded-2xl border-2 border-joy-orange/30 pointer-events-none"
                   initial={{ opacity: 0 }}
                   animate={{ 
-                    opacity: [0, 0.3, 0],
-                    scale: [1, 1.1, 1.2]
+                    opacity: [0, 0.2, 0],
+                    scale: [1, 1.05, 1.1]
                   }}
                   transition={{ 
-                    duration: 4,
+                    duration: 1,
                     repeat: Infinity,
                     repeatType: 'loop',
-                    ease: 'easeOut'
+                    ease: 'easeInOut'
                   }}
                 />
               </motion.div>
