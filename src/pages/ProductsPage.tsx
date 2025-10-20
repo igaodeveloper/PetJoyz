@@ -43,6 +43,14 @@ type PriceRange = [number, number];
 export default function ProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   
+  // Get search query from URL
+  const searchQuery = searchParams.get('search') || '';
+  
+  // Initialize filters from URL
+  useEffect(() => {
+    const categoriesParam = searchParams.get('categories');
+  }, [searchParams]);
+
   // Sample brands data
   const brands = [
     { id: 'royal-canin', label: 'Royal Canin' },
@@ -56,7 +64,6 @@ export default function ProductsPage() {
   }));
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [priceRange, setPriceRange] = useState<PriceRange>([0, 1000]);
-  const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('featured');
   const [isCategoryOpen, setIsCategoryOpen] = useState(true);
   const [isPriceOpen, setIsPriceOpen] = useState(true);
@@ -73,12 +80,18 @@ export default function ProductsPage() {
     }));
 
   // Apply filters
-  const filteredProducts = productsData.filter(product => {
-    // Filter by search query
-    if (searchQuery && !product.title.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
+  const filteredProducts = productsData.filter((product) => {
+    // Apply search filter if search query exists
+    if (searchQuery) {
+      const searchLower = searchQuery.toLowerCase();
+      const matchesSearch = 
+        product.title.toLowerCase().includes(searchLower) ||
+        product.description.toLowerCase().includes(searchLower) ||
+        product.tags.some(tag => tag.toLowerCase().includes(searchLower));
+      
+      if (!matchesSearch) return false;
     }
-    
+
     // Filter by price range
     if (product.price < priceRange[0] * 100 || product.price > priceRange[1] * 100) {
       return false;
@@ -136,7 +149,10 @@ export default function ProductsPage() {
 
   const clearFilters = () => {
     setPriceRange([0, 1000]);
-    setSearchQuery('');
+    // Update the URL to remove the search parameter
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.delete('search');
+    setSearchParams(newParams);
     setSelectedCategories([]);
     setSelectedBrands([]);
   };
@@ -151,6 +167,13 @@ export default function ProductsPage() {
 
   return (
     <div className="bg-soft-cream min-h-screen">
+      {searchQuery && (
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-deep-navy">Resultados para: {searchQuery}</h2>
+          <p className="text-deep-navy/70">{filteredProducts.length} produtos encontrados</p>
+        </div>
+      )}
+      
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-12">
@@ -166,7 +189,16 @@ export default function ProductsPage() {
                 placeholder="Buscar produtos..."
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-petjoy focus:ring-2 focus:ring-joy-orange focus:border-transparent"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  const newSearchQuery = e.target.value;
+                  const newParams = new URLSearchParams(searchParams.toString());
+                  if (newSearchQuery) {
+                    newParams.set('search', newSearchQuery);
+                  } else {
+                    newParams.delete('search');
+                  }
+                  setSearchParams(newParams);
+                }}
               />
             </div>
             
@@ -375,7 +407,16 @@ export default function ProductsPage() {
                 placeholder="Buscar produtos..."
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-petjoy focus:ring-2 focus:ring-joy-orange focus:border-transparent"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  const newSearchQuery = e.target.value;
+                  const newParams = new URLSearchParams(searchParams.toString());
+                  if (newSearchQuery) {
+                    newParams.set('search', newSearchQuery);
+                  } else {
+                    newParams.delete('search');
+                  }
+                  setSearchParams(newParams);
+                }}
               />
             </div>
 
@@ -434,13 +475,12 @@ export default function ProductsPage() {
               {isPriceOpen && (
                 <div className="pt-2 space-y-4">
                   <div className="px-1">
-                    <Slider
-                      min={0}
-                      max={1000}
-                      step={10}
-                      value={priceRange}
-                      onValueChange={handlePriceChange}
-                      className="py-4"
+                    <Input
+                      type="search"
+                      name="search"
+                      placeholder="Buscar produtos..."
+                      className="pl-10 w-full"
+                      defaultValue={searchQuery}
                     />
                     <div className="flex justify-between text-sm text-gray-600">
                       <span>{formatPrice(priceRange[0])}</span>

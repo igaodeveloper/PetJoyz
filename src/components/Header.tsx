@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Search, Heart, ShoppingCart, User, Menu, X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Search, Heart, ShoppingCart, User, Menu, X, Search as SearchIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '@/hooks/useCart';
 
 // Animation variants
 const containerVariants = {
@@ -62,7 +63,13 @@ const menuVariants = {
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [cartCount] = useState(0);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const { cart, getCartCount } = useCart();
+  const cartCount = getCartCount();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,6 +89,37 @@ export default function Header() {
   ];
 
   const location = useLocation();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/produtos?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+      setIsSearchOpen(false);
+    }
+  };
+
+  const handleSearchClick = () => {
+    setIsSearchOpen(true);
+    // Focus the input after a small delay to ensure it's visible
+    setTimeout(() => {
+      searchInputRef.current?.focus();
+    }, 0);
+  };
+
+  // Close search when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <motion.header
@@ -156,15 +194,53 @@ export default function Header() {
             className="flex items-center gap-2 md:gap-4"
             variants={containerVariants}
           >
-            <motion.div whileHover={buttonHover} whileTap={buttonTap}>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-deep-navy hover:text-joy-orange"
-                aria-label="Buscar"
-              >
-                <Search className="h-5 w-5" />
-              </Button>
+            <motion.div 
+              className="relative"
+              ref={searchContainerRef}
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {isSearchOpen ? (
+                <motion.form
+                  className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-lg rounded-full pl-4 pr-2 py-1 flex items-center z-50"
+                  initial={{ width: 0, opacity: 0, x: 20 }}
+                  animate={{ width: 300, opacity: 1, x: 0 }}
+                  exit={{ width: 0, opacity: 0, x: 20 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  onSubmit={handleSearch}
+                >
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Buscar produtos..."
+                    className="w-full bg-transparent border-none outline-none text-deep-navy placeholder-deep-navy/60"
+                  />
+                  <Button
+                    type="submit"
+                    variant="ghost"
+                    size="icon"
+                    className="text-deep-navy hover:text-joy-orange h-8 w-8"
+                    aria-label="Buscar"
+                  >
+                    <SearchIcon className="h-4 w-4" />
+                  </Button>
+                </motion.form>
+              ) : (
+                <motion.div whileHover={buttonHover} whileTap={buttonTap}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-deep-navy hover:text-joy-orange"
+                    aria-label="Abrir busca"
+                    onClick={handleSearchClick}
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                </motion.div>
+              )}
             </motion.div>
 
             <motion.div whileHover={buttonHover} whileTap={buttonTap} className="hidden md:flex">
@@ -188,6 +264,7 @@ export default function Header() {
                 size="icon"
                 className="text-deep-navy hover:text-joy-orange relative"
                 aria-label="Carrinho"
+                onClick={() => navigate('/carrinho')}
               >
                 <ShoppingCart className="h-5 w-5" />
                 <AnimatePresence>
@@ -266,6 +343,20 @@ export default function Header() {
                           </Link>
                         </motion.div>
                       ))}
+                      <motion.div
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.1 * menuItems.length }}
+                        whileHover={{ x: 5 }}
+                      >
+                        <Link
+                          to="/carrinho"
+                          className="text-lg font-medium text-deep-navy hover:text-joy-orange transition-colors py-2 inline-flex items-center gap-2"
+                        >
+                          <ShoppingCart className="h-5 w-5" />
+                          Carrinho {cartCount > 0 && `(${cartCount})`}
+                        </Link>
+                      </motion.div>
                     </nav>
                   </motion.div>
                 </SheetContent>
