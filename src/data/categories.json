@@ -12,19 +12,5 @@
     "slug": "acessorios",
     "description": "Tudo para o conforto do seu amigo",
     "icon": "🎀"
-  },
-  {
-    "id": "petiscos",
-    "name": "Petiscos",
-    "slug": "petiscos",
-    "description": "Recompensas deliciosas e saudáveis",
-    "icon": "🦴"
-  },
-  {
-    "id": "colecoes",
-    "name": "Coleções",
-    "slug": "colecoes",
-    "description": "Produtos especiais selecionados",
-    "icon": "⭐"
   }
 ]

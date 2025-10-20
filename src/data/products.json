@@ -44,49 +44,6 @@
     ]
   },
   {
-    "id": "3",
-    "title": "Petiscos Naturais Frango",
-    "slug": "petiscos-naturais-frango",
-    "description": "Petiscos 100% naturais de frango desidratado. Sem conservantes, perfeito para treinos e recompensas.",
-    "price": 2490,
-    "currency": "BRL",
-    "images": [
-      "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=800&q=80"
-    ],
-    "category": "petiscos",
-    "badges": ["Top PetJoy"],
-    "tags": ["cães", "natural", "treino"],
-    "rating": 4.7,
-    "reviewCount": 203,
-    "stock": 156,
-    "variants": [
-      { "size": "100g", "color": null },
-      { "size": "250g", "color": null }
-    ]
-  },
-  {
-    "id": "4",
-    "title": "Cama Nuvem Confort",
-    "slug": "cama-nuvem-confort",
-    "description": "Cama ultra macia com enchimento de fibra siliconada. Seu pet vai adorar essa nuvem de conforto!",
-    "price": 15990,
-    "currency": "BRL",
-    "images": [
-      "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800&q=80"
-    ],
-    "category": "acessorios",
-    "badges": ["Top PetJoy"],
-    "tags": ["cães", "gatos", "cama", "conforto"],
-    "rating": 4.9,
-    "reviewCount": 156,
-    "stock": 34,
-    "variants": [
-      { "size": "P", "color": "Cinza" },
-      { "size": "M", "color": "Cinza" },
-      { "size": "G", "color": "Cinza" }
-    ]
-  },
-  {
     "id": "5",
     "title": "Mordedor Dental Menta",
     "slug": "mordedor-dental-menta",
@@ -168,48 +125,6 @@
     "variants": [
       { "size": "M", "color": "Colorido" },
       { "size": "G", "color": "Colorido" }
-    ]
-  },
-  {
-    "id": "9",
-    "title": "Petiscos Salmão Premium",
-    "slug": "petiscos-salmao-premium",
-    "description": "Petiscos de salmão desidratado, rico em ômega 3. Ideal para pelagem brilhante e saúde do coração.",
-    "price": 3490,
-    "currency": "BRL",
-    "images": [
-      "https://images.unsplash.com/photo-1589941013453-ec89f33b5e95?w=800&q=80"
-    ],
-    "category": "petiscos",
-    "badges": ["Top PetJoy", "Eco"],
-    "tags": ["cães", "gatos", "salmão", "premium"],
-    "rating": 4.9,
-    "reviewCount": 234,
-    "stock": 178,
-    "variants": [
-      { "size": "100g", "color": null },
-      { "size": "250g", "color": null }
-    ]
-  },
-  {
-    "id": "10",
-    "title": "Casinha Iglu Térmica",
-    "slug": "casinha-iglu-termica",
-    "description": "Casinha térmica que mantém a temperatura ideal. Perfeita para todas as estações do ano!",
-    "price": 24990,
-    "currency": "BRL",
-    "images": [
-      "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80"
-    ],
-    "category": "acessorios",
-    "badges": ["Novo"],
-    "tags": ["cães", "gatos", "casinha", "térmica"],
-    "rating": 4.8,
-    "reviewCount": 67,
-    "stock": 23,
-    "variants": [
-      { "size": "P", "color": "Cinza" },
-      { "size": "M", "color": "Cinza" }
     ]
   },
   {

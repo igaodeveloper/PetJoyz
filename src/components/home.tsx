@@ -87,25 +87,53 @@ export default function Home() {
       </section>
 
       {/* Categories Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-deep-navy mb-12">
-            Explore por Categoria
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {categoriesData.map((category) => (
-              <Card
+      <section className="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="text-center mb-16">
+            <motion.h2 
+              className="text-3xl md:text-4xl lg:text-5xl font-bold text-deep-navy mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              Explore por Categoria
+            </motion.h2>
+            <div className="w-24 h-1 bg-joy-orange mx-auto mb-8"></div>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Encontre os melhores produtos para o seu pet em nossas categorias selecionadas
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
+            {categoriesData.map((category, index) => (
+              <motion.div
                 key={category.id}
-                className="group cursor-pointer border-0 shadow-petjoy-soft hover:shadow-petjoy-crisp transition-all duration-300 hover:-translate-y-2 bg-soft-cream"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <CardContent className="p-6 text-center">
-                  <div className="text-5xl mb-4">{category.icon}</div>
-                  <h3 className="font-primary font-semibold text-lg text-deep-navy mb-2 group-hover:text-joy-orange transition-colors">
-                    {category.name}
-                  </h3>
-                  <p className="text-sm text-gray-600">{category.description}</p>
-                </CardContent>
-              </Card>
+                <Card
+                  className="group cursor-pointer border-2 border-transparent hover:border-joy-orange/30 bg-white shadow-petjoy-soft hover:shadow-petjoy-crisp transition-all duration-300 h-full flex flex-col"
+                >
+                  <CardContent className="p-8 text-center flex flex-col items-center justify-center h-full">
+                    <div className="text-6xl mb-6 text-joy-orange group-hover:scale-110 transition-transform duration-300">
+                      {category.icon}
+                    </div>
+                    <h3 className="font-primary font-bold text-xl text-deep-navy mb-3 group-hover:text-joy-orange transition-colors">
+                      {category.name}
+                    </h3>
+                    <p className="text-gray-600 mb-4">{category.description}</p>
+                    <Button 
+                      variant="outline" 
+                      className="mt-auto border-joy-orange text-joy-orange hover:bg-joy-orange/10 transition-colors"
+                    >
+                      Ver Produtos <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
