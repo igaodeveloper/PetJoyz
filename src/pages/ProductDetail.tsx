@@ -6,14 +6,55 @@ import ProductCard from '../components/ProductCard';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
-import productsData from '../data/products.json';
+import api from '../services/api';
+import { useEffect } from 'react';
 
 export default function ProductDetail() {
   const { slug } = useParams();
-  const product = productsData.find(p => p.slug === slug);
+  const [product, setProduct] = useState<any | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState(0);
+
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      try {
+        if (!slug) return;
+        setLoading(true);
+        const p = await api.getProductBySlug(slug);
+        if (!mounted) return;
+        setProduct(p);
+        // Try to load related products by product id
+        try {
+          const related = await api.getRelatedProducts(p.id, 4);
+          if (mounted) setRelatedProducts(related || []);
+        } catch (e) {
+          // ignore related load errors
+          if (mounted) setRelatedProducts([]);
+        }
+      } catch (error) {
+        setProduct(null);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    load();
+    return () => { mounted = false; };
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-soft-cream">
+        <div className="container mx-auto px-4 py-16 text-center">
+          <h1 className="text-3xl font-semibold text-deep-navy mb-4">Carregando produto...</h1>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (

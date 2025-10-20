@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import ProductCard from '@/components/ProductCard';
 
-// Mock data - replace with actual data from your wishlist context/API
+// TODO: replace this placeholder with real wishlist data from user context or API
 const wishlistItems = [
   {
     id: '1',

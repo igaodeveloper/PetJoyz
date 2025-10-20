@@ -6,11 +6,34 @@ import { Card, CardContent } from './ui/card';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Award, Leaf, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
-import productsData from '../data/products.json';
-import categoriesData from '../data/categories.json';
+import api from '../services/api';
+import { useEffect } from 'react';
 
 export default function Home() {
-  const featuredProducts = productsData.slice(0, 6);
+  const [featuredProducts, setFeaturedProducts] = React.useState<any[]>([]);
+  const [categories, setCategories] = React.useState<any[]>([]);
+
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      try {
+        const [f, cats] = await Promise.all([
+          api.getFeaturedProducts(6).catch(() => []),
+          api.getCategories().catch(() => [])
+        ]);
+        if (!mounted) return;
+        setFeaturedProducts(f as any[]);
+        setCategories(cats as any[]);
+      } catch (e) {
+        if (mounted) {
+          setFeaturedProducts([]);
+          setCategories([]);
+        }
+      }
+    };
+    load();
+    return () => { mounted = false; };
+  }, []);
 
   return (
     <div className="min-h-screen bg-soft-cream">
@@ -106,7 +129,7 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
-            {categoriesData.map((category, index) => (
+            {categories.map((category, index) => (
               <motion.div
                 key={category.id}
                 initial={{ opacity: 0, y: 30 }}

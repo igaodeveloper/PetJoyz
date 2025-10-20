@@ -9,9 +9,8 @@ import { Label } from '../components/ui/label';
 import { Slider } from '../components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import productsData from '../data/products.json';
-import categoriesData from '../data/categories.json';
-import brandsData from '../data/brands.json';
+import api from '../services/api';
+import { useEffect } from 'react';
 
 // Type definitions for the JSON data
 interface Category {
@@ -32,8 +31,8 @@ interface Brand {
 }
 
 // Type assertions for the imported JSON data
-const typedCategories = categoriesData as Category[];
-const typedBrands = (brandsData as { brands: Brand[] }).brands;
+const typedCategories: Category[] = [];
+let typedBrands: Brand[] = [];
 
 interface Product {
   id: string;
@@ -124,56 +123,68 @@ const OfertasPage = () => {
 
   // Carregar produtos em oferta
   useEffect(() => {
-    // Simular carregamento
-    const loadProducts = () => {
-      // Filtrar produtos com desconto > 0
-      const discountedProducts = (productsData as any[])
-        .filter((product) => (product.discount || 0) > 0)
-        .map((product) => ({
-          ...product,
-          // Garantir que os campos obrigatórios existam
-          originalPrice: product.originalPrice || Math.round(product.price / (1 - (product.discount || 0) / 100)),
-          discount: product.discount || 0,
-          // Usar o primeiro item do array de imagens como imagem principal
-          image: product.images?.[0] || '',
-          // Garantir que arrays sejam sempre arrays
-          badges: product.badges || [],
-          tags: product.tags || [],
-          variants: product.variants || [],
-          // Garantir valores padrão para campos numéricos
-          reviewCount: product.reviewCount || 0,
-          rating: product.rating || 0,
-          stock: product.stock || 0
-        })) as Product[];
+    let mounted = true;
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        // fetch products, categories, brands
+        const [allProducts, categories, brands] = await Promise.all([
+          api.getSpecialOffers(200).catch(() => []),
+          api.getCategories().catch(() => []),
+          api.getBrands().catch(() => [])
+        ]);
 
-      // Ordenar por maior desconto primeiro
-      const sortedByDiscount = [...discountedProducts].sort((a, b) => (b.discount || 0) - (a.discount || 0));
-      
-      // Calcular contagem de produtos por categoria
-      const categoryCounts: { [key: string]: number } = {};
-      sortedByDiscount.forEach(product => {
-        categoryCounts[product.category] = (categoryCounts[product.category] || 0) + 1;
-      });
+        if (!mounted) return;
 
-      // Atualizar categorias com as contagens
-      const updatedCategories = typedCategories.map(category => ({
-        ...category,
-        count: categoryCounts[category.id] || 0
-      }));
-      
-      setCategoriesWithCounts(updatedCategories);
-      
-      // Definir produtos em destaque (os 4 com maior desconto)
-      setFeaturedProducts(sortedByDiscount.slice(0, 4));
-      
-      // Definir todos os produtos
-      setProducts(sortedByDiscount);
-      setLoading(false);
+        // normalize brands and categories
+        const cats = (categories as any[]) || [];
+        const bds = (brands as any[]) || [];
+
+        // Map products to expected Product shape and compute discounts
+        const discountedProducts = (allProducts as any[])
+          .filter((product) => (product.discount || 0) > 0)
+          .map((product) => ({
+            ...product,
+            originalPrice: product.originalPrice || Math.round(product.price / (1 - (product.discount || 0) / 100)),
+            discount: product.discount || 0,
+            image: product.images?.[0] || '',
+            badges: product.badges || [],
+            tags: product.tags || [],
+            variants: product.variants || [],
+            reviewCount: product.reviewCount || 0,
+            rating: product.rating || 0,
+            stock: product.stock || 0
+          })) as Product[];
+
+        const sortedByDiscount = [...discountedProducts].sort((a, b) => (b.discount || 0) - (a.discount || 0));
+
+        const categoryCounts: { [key: string]: number } = {};
+        sortedByDiscount.forEach(product => {
+          categoryCounts[product.category] = (categoryCounts[product.category] || 0) + 1;
+        });
+
+        const updatedCategories = cats.map((category: any) => ({
+          ...category,
+          count: categoryCounts[category.id] || 0
+        }));
+
+        setCategoriesWithCounts(updatedCategories as Category[]);
+        setFeaturedProducts(sortedByDiscount.slice(0, 4));
+        setProducts(sortedByDiscount);
+      } catch (e) {
+        // fallback to empty
+        if (mounted) {
+          setCategoriesWithCounts([]);
+          setFeaturedProducts([]);
+          setProducts([]);
+        }
+      } finally {
+        if (mounted) setLoading(false);
+      }
     };
 
-    // Simular carregamento
-    const timer = setTimeout(loadProducts, 800);
-    return () => clearTimeout(timer);
+    loadProducts();
+    return () => { mounted = false; };
   }, []);
 
   // Função para alternar filtro de marca

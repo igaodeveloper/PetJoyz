@@ -8,18 +8,43 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Sheet, SheetContent, SheetTrigger } from '../components/ui/sheet';
 import { Checkbox } from '../components/ui/checkbox';
 import { Slider } from '../components/ui/slider';
-import productsData from '../data/products.json';
-import categoriesData from '../data/categories.json';
+import api from '../services/api';
+import { useEffect } from 'react';
 
 export default function CategoryPage() {
   const { slug } = useParams();
-  const category = categoriesData.find(c => c.slug === slug);
+  const [category, setCategory] = useState<any | null>(null);
   const [priceRange, setPriceRange] = useState([0, 50000]);
   const [sortBy, setSortBy] = useState('popular');
 
-  const filteredProducts = productsData.filter(p => p.category === slug);
+  const [filteredProductsList, setFilteredProductsList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      try {
+        setLoading(true);
+        if (!slug) return;
+        const [cat, allProducts] = await Promise.all([
+          api.getCategoryBySlug(slug).catch(() => null),
+          api.getProducts().catch(() => [])
+        ]);
+        if (!mounted) return;
+        setCategory(cat);
+        const filtered = (allProducts as any[]).filter(p => p.category === slug);
+        setFilteredProductsList(filtered);
+      } catch (e) {
+        if (mounted) setFilteredProductsList([]);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+    load();
+    return () => { mounted = false; };
+  }, [slug]);
+
+  const sortedProducts = [...filteredProductsList].sort((a, b) => {
     switch (sortBy) {
       case 'price-asc':
         return a.price - b.price;
