@@ -290,13 +290,13 @@ export default function Header() {
                         whileHover={{ y: -2 }}
                         className="mt-6"
                       >
-                        <Button 
+                        <motion.button 
                           className="w-full bg-joy-orange hover:bg-aqua-mint text-white rounded-petjoy py-6 text-lg"
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
                           Adote a Alegria
-                        </Button>
+                        </motion.button>
                       </motion.div>
                     </nav>
                   </motion.div>

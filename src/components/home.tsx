@@ -1,4 +1,3 @@
-import Header from './Header';
 import Footer from './Footer';
 import ProductCard from './ProductCard';
 import { Button } from './ui/button';
@@ -13,8 +12,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-soft-cream">
-      <Header />
-
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-joy-orange via-peach-blush to-soft-cream">
         <div className="container mx-auto px-4 py-16 md:py-24">

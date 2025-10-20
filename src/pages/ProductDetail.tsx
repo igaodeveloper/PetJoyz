@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Star, ShoppingCart, Heart, Share2, ChevronLeft, Plus, Minus } from 'lucide-react';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProductCard from '../components/ProductCard';
 import { Button } from '../components/ui/button';
@@ -19,7 +18,6 @@ export default function ProductDetail() {
   if (!product) {
     return (
       <div className="min-h-screen bg-soft-cream">
-        <Header />
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl font-bold text-deep-navy mb-4">Produto não encontrado</h1>
           <Link to="/">
@@ -28,7 +26,6 @@ export default function ProductDetail() {
             </Button>
           </Link>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -44,7 +41,6 @@ export default function ProductDetail() {
 
   return (
     <div className="min-h-screen bg-soft-cream">
-      <Header />
 
       {/* Breadcrumbs */}
       <div className="bg-white border-b">

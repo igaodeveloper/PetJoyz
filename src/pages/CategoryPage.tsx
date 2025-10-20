@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ChevronDown, SlidersHorizontal } from 'lucide-react';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProductCard from '../components/ProductCard';
 import { Button } from '../components/ui/button';
@@ -99,7 +98,6 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-soft-cream">
-      <Header />
 
       {/* Category Hero */}
       <div className="bg-gradient-to-r from-joy-orange to-peach-blush py-12">
