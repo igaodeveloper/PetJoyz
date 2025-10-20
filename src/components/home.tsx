@@ -125,12 +125,14 @@ export default function Home() {
                       {category.name}
                     </h3>
                     <p className="text-gray-600 mb-4">{category.description}</p>
-                    <Button 
-                      variant="outline" 
-                      className="mt-auto border-joy-orange text-joy-orange hover:bg-joy-orange/10 transition-colors"
-                    >
-                      Ver Produtos <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                    <Link to={`/categoria/${category.slug}`} className="w-full mt-4">
+                      <Button 
+                        variant="outline" 
+                        className="w-full border-joy-orange text-joy-orange hover:bg-joy-orange/10 transition-colors"
+                      >
+                        Ver Produtos <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               </motion.div>
