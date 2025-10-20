@@ -219,23 +219,6 @@ export default function Header() {
               </Button>
             </motion.div>
 
-            <motion.div 
-              whileHover={{ 
-                y: -2,
-                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
-              }}
-              whileTap={{ 
-                scale: 0.98,
-                boxShadow: '0 2px 5px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.1)'
-              }}
-              className="hidden lg:block"
-            >
-              <Button
-                className="bg-joy-orange hover:bg-aqua-mint text-white transition-all duration-300 rounded-petjoy w-full h-full"
-              >
-                Adote a Alegria
-              </Button>
-            </motion.div>
 
             {/* Mobile Menu */}
             <motion.div className="lg:hidden" whileHover={buttonHover} whileTap={buttonTap}>
@@ -283,21 +266,6 @@ export default function Header() {
                           </Link>
                         </motion.div>
                       ))}
-                      <motion.div
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.1 * menuItems.length + 0.1 }}
-                        whileHover={{ y: -2 }}
-                        className="mt-6"
-                      >
-                        <motion.button 
-                          className="w-full bg-joy-orange hover:bg-aqua-mint text-white rounded-petjoy py-6 text-lg"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                        >
-                          Adote a Alegria
-                        </motion.button>
-                      </motion.div>
                     </nav>
                   </motion.div>
                 </SheetContent>
