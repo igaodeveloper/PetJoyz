@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Footer from './Footer';
 import ProductCard from './ProductCard';
 import { Button } from './ui/button';
@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Award, Leaf, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import api from '../services/api';
-import { useEffect } from 'react';
+import { fadeInUp, staggerContainer } from '@/lib/animations'
 
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = React.useState<any[]>([]);
@@ -42,14 +42,14 @@ export default function Home() {
         <div className="container mx-auto px-4 py-16 md:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
-            <div className="text-center lg:text-left">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-deep-navy mb-6 animate-bounce-subtle">
+            <motion.div className="text-center lg:text-left" variants={staggerContainer} initial="hidden" animate="visible">
+              <motion.h1 variants={fadeInUp} className="text-4xl md:text-5xl lg:text-6xl font-bold text-deep-navy mb-6">
                 Espalhe Alegria para seu Pet! 🐾
-              </h1>
-              <p className="text-lg md:text-xl text-forest-green mb-8 max-w-xl">
+              </motion.h1>
+              <motion.p variants={fadeInUp} className="text-lg md:text-xl text-forest-green mb-8 max-w-xl">
                 Produtos selecionados com carinho para transformar cada momento com seu melhor amigo em pura diversão e amor.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              </motion.p>
+              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link to="/produtos">
                   <Button
                     size="lg"
@@ -68,8 +68,8 @@ export default function Home() {
                     Ver Ofertas
                   </Button>
                 </Link>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Right Visual - Pet Image with Animation */}
             <motion.div 

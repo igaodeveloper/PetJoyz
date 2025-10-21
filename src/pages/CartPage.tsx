@@ -1,6 +1,8 @@
 import { ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import AnimatedSection from '@/components/AnimatedSection';
+import { buttonElevate } from '@/lib/animations'
 import { useCart } from '@/hooks/useCart';
 
 export default function CartPage() {
@@ -13,6 +15,7 @@ export default function CartPage() {
 
   if (cart.length === 0) {
     return (
+      <AnimatedSection>
       <div className="container mx-auto px-4 py-16 text-center">
         <div className="max-w-md mx-auto">
           <div className="w-24 h-24 mx-auto mb-6 flex items-center justify-center bg-joy-orange/10 rounded-full">
@@ -21,12 +24,13 @@ export default function CartPage() {
           <h1 className="text-3xl font-bold text-deep-navy mb-4">Seu carrinho está vazio</h1>
           <p className="text-gray-600 mb-8">Parece que você ainda não adicionou nenhum produto ao carrinho.</p>
           <Link to="/produtos">
-            <Button className="bg-joy-orange hover:bg-aqua-mint text-white">
+            <Button className="bg-joy-orange text-white" variants={buttonElevate} initial="rest" whileHover="hover" whileTap="tap">
               Ver Produtos
             </Button>
           </Link>
         </div>
       </div>
+      </AnimatedSection>
     );
   }
 
@@ -154,7 +158,7 @@ export default function CartPage() {
               </div>
               
               <Link to="/pagamento" className="w-full block">
-                <Button className="w-full mt-6 bg-joy-orange hover:bg-joy-orange/90 text-white h-12 text-lg">
+                <Button className="w-full mt-6 bg-joy-orange text-white h-12 text-lg" variants={buttonElevate} initial="rest" whileHover="hover" whileTap="tap">
                   Finalizar Compra
                 </Button>
               </Link>

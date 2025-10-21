@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Star, ShoppingCart, Heart, Share2, ChevronLeft, Plus, Minus } from 'lucide-react';
 import Footer from '../components/Footer';
@@ -7,7 +7,8 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
 import api from '../services/api';
-import { useEffect } from 'react';
+import AnimatedSection from '../components/AnimatedSection';
+import { buttonElevate } from '@/lib/animations'
 
 export default function ProductDetail() {
   const { slug } = useParams();
@@ -71,7 +72,6 @@ export default function ProductDetail() {
     );
   }
 
-  const relatedProducts = productsData.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -99,7 +99,8 @@ export default function ProductDetail() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+        <AnimatedSection>
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Image Gallery */}
           <div className="space-y-4">
             <div className="aspect-square bg-white rounded-petjoy overflow-hidden shadow-petjoy-soft">
@@ -125,7 +126,7 @@ export default function ProductDetail() {
           </div>
 
           {/* Product Info */}
-          <div className="space-y-6">
+            <div className="space-y-6">
             <div>
               <div className="flex items-center gap-2 mb-3">
                 {product.badges.map((badge) => (
@@ -229,7 +230,11 @@ export default function ProductDetail() {
             <div className="flex gap-3">
               <Button
                 size="lg"
-                className="flex-1 bg-joy-orange hover:bg-aqua-mint text-white rounded-petjoy shadow-petjoy-crisp"
+                className="flex-1 bg-joy-orange text-white rounded-petjoy"
+                variants={buttonElevate}
+                initial="rest"
+                whileHover="hover"
+                whileTap="tap"
               >
                 <ShoppingCart className="mr-2 h-5 w-5" />
                 Adicionar Alegria ao Carrinho
@@ -237,7 +242,11 @@ export default function ProductDetail() {
               <Button
                 variant="outline"
                 size="icon"
-                className="rounded-petjoy border-2 border-joy-orange text-joy-orange hover:bg-joy-orange hover:text-white"
+                className="rounded-petjoy border-2 border-joy-orange text-joy-orange"
+                variants={buttonElevate}
+                initial="rest"
+                whileHover="hover"
+                whileTap="tap"
               >
                 <Heart className="h-5 w-5" />
               </Button>
@@ -245,6 +254,10 @@ export default function ProductDetail() {
                 variant="outline"
                 size="icon"
                 className="rounded-petjoy"
+                variants={buttonElevate}
+                initial="rest"
+                whileHover="hover"
+                whileTap="tap"
               >
                 <Share2 className="h-5 w-5" />
               </Button>
@@ -286,6 +299,8 @@ export default function ProductDetail() {
             </Accordion>
           </div>
         </div>
+
+        </AnimatedSection>
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (

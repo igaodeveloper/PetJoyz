@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import AnimatedSection from './AnimatedSection';
+import { buttonElevate } from '@/lib/animations'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -9,6 +11,7 @@ export default function Footer() {
   return (
     <footer className="bg-deep-navy text-soft-cream">
       {/* Newsletter Section */}
+      <AnimatedSection>
       <div className="border-b border-soft-cream/10">
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-2xl mx-auto text-center">
@@ -24,13 +27,14 @@ export default function Footer() {
                 placeholder="seu@email.com"
                 className="bg-soft-cream/10 border-soft-cream/20 text-soft-cream placeholder:text-soft-cream/50 focus:border-joy-orange"
               />
-              <Button className="bg-joy-orange hover:bg-aqua-mint text-white rounded-petjoy whitespace-nowrap">
+              <Button className="bg-joy-orange text-white rounded-petjoy whitespace-nowrap" variants={buttonElevate} initial="rest" whileHover="hover" whileTap="tap">
                 Quero Descontos!
               </Button>
             </div>
           </div>
         </div>
       </div>
+      </AnimatedSection>
 
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 py-12">

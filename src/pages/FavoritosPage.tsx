@@ -1,37 +1,33 @@
 import { Heart, Home, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import ProductCard from '@/components/ProductCard';
+import { Button } from '../components/ui/button';
+import ProductCard from '../components/ProductCard';
+import { useEffect, useState } from 'react';
+import api from '../services/api';
 
-// TODO: replace this placeholder with real wishlist data from user context or API
-const wishlistItems = [
-  {
-    id: '1',
-    slug: 'racao-premium-para-caes',
-    title: 'Ração Premium para Cães',
-    price: 12990, // Price in cents
-    originalPrice: 14990,
-    images: ['/images/produto1.jpg'],
-    rating: 4.8,
-    reviewCount: 156,
-    badges: ['Novo', 'Oferta'],
-    showDiscountBadge: true
-  },
-  {
-    id: '2',
-    slug: 'brinquedo-para-gatos',
-    title: 'Brinquedo para Gatos',
-    price: 4590, // Price in cents
-    images: ['/images/produto2.jpg'],
-    rating: 4.5,
-    reviewCount: 89,
-    badges: ['Mais Vendido']
-  },
-  // Add more mock items as needed
-];
+// Wishlist will come from API or user context. For now, start empty and try to load if endpoint exists.
+const emptyWishlist: any[] = [];
 
 export default function FavoritosPage() {
+  const [wishlistItems, setWishlistItems] = useState<any[]>(emptyWishlist);
+
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      try {
+        // If you have a wishlist endpoint, call it here. Placeholder: empty
+        // const data = await api.getWishlist();
+        const data: any[] = [];
+        if (mounted) setWishlistItems(data);
+      } catch (e) {
+        if (mounted) setWishlistItems([]);
+      }
+    };
+    load();
+    return () => { mounted = false; };
+  }, []);
+
   return (
     <div className="min-h-screen bg-soft-cream py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">

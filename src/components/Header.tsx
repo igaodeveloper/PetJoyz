@@ -4,7 +4,8 @@ import { Search, ShoppingCart, User, Menu, X, Search as SearchIcon } from 'lucid
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { buttonElevate, headerUnderline } from '@/lib/animations'
 import { useCart } from '@/hooks/useCart';
 
 // Animation variants
@@ -20,24 +21,19 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { y: -20, opacity: 0 },
+  hidden: { y: -12, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
     transition: {
       type: 'spring',
-      stiffness: 100,
-      damping: 15
+      stiffness: 180,
+      damping: 22,
     }
   },
-  hover: {
-    scale: 1.05,
-    transition: { duration: 0.2 }
-  },
-  tap: {
-    scale: 0.95
-  }
-};
+  hover: { y: -3, transition: { duration: 0.12 } },
+  tap: { y: 0, transition: { duration: 0.06 } }
+}
 
 const buttonHover = {
   scale: 1.05,
@@ -130,6 +126,7 @@ export default function Header() {
   ];
 
   const location = useLocation();
+  const shouldReduceMotion = useReducedMotion();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -206,24 +203,24 @@ export default function Header() {
             variants={containerVariants}
           >
             {menuItems.map((item, index) => (
-              <motion.div 
+              <motion.div
                 key={item.href}
                 variants={itemVariants}
-                whileHover={{ y: -2 }}
-                whileTap={{ y: 0 }}
+                initial="hidden"
+                animate="visible"
               >
                 <Link
                   to={item.href}
-                  className={`relative text-deep-navy hover:text-joy-orange transition-colors font-medium group`}
+                  className={`relative text-deep-navy hover:text-joy-orange transition-colors font-medium group px-1 py-1`}
                 >
                   {item.label}
-                  <motion.span 
-                    className="absolute left-0 -bottom-1 w-0 h-0.5 bg-joy-orange rounded-full transition-all duration-300 group-hover:w-full"
-                    initial={{ width: 0 }}
-                    animate={{ 
-                      width: location.pathname === item.href ? '100%' : 0,
-                      backgroundColor: location.pathname === item.href ? '#FF7E5D' : '#FF7E5D'
-                    }}
+                  <motion.span
+                    className="absolute left-0 -bottom-1 h-0.5 bg-joy-orange rounded-full"
+                    initial="hidden"
+                    animate={location.pathname === item.href ? 'visible' : 'hidden'}
+                    variants={headerUnderline}
+                    custom={'100%'}
+                    style={{ display: 'block' }}
                   />
                 </Link>
               </motion.div>
@@ -273,15 +270,19 @@ export default function Header() {
                       whileTap={{ scale: 0.95 }}
                       className="ml-1"
                     >
-                      <Button
-                        type="submit"
-                        variant="ghost"
-                        size="icon"
-                        className="text-joy-orange hover:bg-joy-orange/10 h-8 w-8 rounded-full"
-                        aria-label="Buscar"
-                      >
-                        <SearchIcon className="h-4 w-4" />
-                      </Button>
+                        <Button
+                          type="submit"
+                          variant="ghost"
+                          size="icon"
+                          className="text-joy-orange hover:bg-joy-orange/10 h-8 w-8 rounded-full"
+                          aria-label="Buscar"
+                          variants={buttonElevate}
+                          initial="rest"
+                          whileHover="hover"
+                          whileTap="tap"
+                        >
+                          <SearchIcon className="h-4 w-4" />
+                        </Button>
                     </motion.div>
                   </motion.form>
                 ) : (
@@ -317,6 +318,10 @@ export default function Header() {
                 className="text-deep-navy hover:text-joy-orange relative"
                 aria-label="Carrinho"
                 onClick={() => navigate('/carrinho')}
+                variants={buttonElevate}
+                initial="rest"
+                whileHover="hover"
+                whileTap="tap"
               >
                 <ShoppingCart className="h-5 w-5" />
                 <AnimatePresence>
@@ -343,6 +348,10 @@ export default function Header() {
                 size="icon"
                 className="text-deep-navy hover:text-joy-orange"
                 aria-label="Conta"
+                variants={buttonElevate}
+                initial="rest"
+                whileHover="hover"
+                whileTap="tap"
               >
                 <User className="h-5 w-5" />
               </Button>
@@ -353,7 +362,7 @@ export default function Header() {
             <motion.div className="lg:hidden" whileHover={buttonHover} whileTap={buttonTap}>
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="Menu">
+                  <Button variant="ghost" size="icon" aria-label="Menu" variants={buttonElevate} initial="rest" whileHover="hover" whileTap="tap">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key="menu-icon"

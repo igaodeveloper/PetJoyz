@@ -33,27 +33,14 @@
 ### Instalação
 
 ```bash
-# Clone o repositório
-git clone <repository-url>
-cd petjoy-frontend
-
-# Instale as dependências
+# Instalar dependências
 npm install
 
-# Inicie o servidor de desenvolvimento
+# Rodar em modo desenvolvimento
 npm run dev
-```
 
-O aplicativo estará disponível em `http://localhost:5173`
-
-### Build para Produção
-
-```bash
-# Gerar build otimizado
-npm run build
-
-# Preview do build
-npm run preview
+# Build e preview
+npm run build; npm run preview
 ```
 
 ---
@@ -74,9 +61,7 @@ npm run preview
 │   │   ├── ProductDetail.tsx
 │   │   ├── CategoryPage.tsx
 │   │   └── NotFound.tsx
-│   ├── data/           # Mock API (JSON)
-│   │   ├── products.json
-│   │   └── categories.json
+│   ├── data/           # (removed) local JSON data
 │   ├── lib/            # Utilitários
 │   ├── index.css       # Estilos globais
 │   ├── App.tsx         # Componente raiz
@@ -151,22 +136,8 @@ npm run preview
 
 ---
 
-## 📊 Mock API
-
-### Produtos (`/src/data/products.json`)
-12 produtos com:
-- ID, título, slug, descrição
-- Preço (em centavos)
-- Imagens (URLs Unsplash)
-- Categoria, badges, tags
-- Rating, reviewCount, stock
-- Variantes (tamanho, cor)
-
-### Categorias (`/src/data/categories.json`)
-- Brinquedos 🎾
-- Acessórios 🎀
-- Petiscos 🦴
-- Coleções ⭐
+## API
+As páginas consomem dados de uma API externa configurada em `src/config/api.ts` via `VITE_API_URL`.
 
 ---
 
@@ -200,7 +171,7 @@ npm run preview
 
 ---
 
-## 📈 Analytics (Mock)
+## 📈 Analytics
 
 ### Eventos para rastrear:
 - `page_view` - Visualização de página
@@ -271,8 +242,8 @@ npm run lighthouse
 - [ ] Filtros de categoria
 - [ ] Ordenação de produtos
 - [ ] Seleção de variantes
-- [ ] Adicionar ao carrinho (mock)
-- [ ] Newsletter signup (mock)
+  - [ ] Adicionar ao carrinho
+  - [ ] Newsletter signup
 
 ---
 
@@ -304,39 +275,24 @@ Nenhuma variável necessária para a versão mock.
 ## 🎯 Próximos Passos
 
 ### Backend Integration
-1. Substituir mock API por endpoints reais
+1. Integrar com endpoints reais de backend
 2. Implementar autenticação de usuário
 3. Integrar gateway de pagamento (Stripe/Mercado Pago)
 4. Sistema de reviews com upload de fotos
 5. Carrinho persistente (localStorage/backend)
 
 ### Features Adicionais
-- [ ] Busca com autocomplete
-- [ ] Wishlist/Favoritos
-- [ ] Comparação de produtos
-- [ ] Chat de suporte (Tobias bot)
-- [ ] Quiz "Qual brinquedo para meu pet?"
-- [ ] Sistema de pontos/gamification
-- [ ] Abandoned cart recovery
 
----
 
-## 📝 Microcopy & Voz da Marca
+## API
 
-**Tom**: Leve, carismático, direto, acolhedor
+Este projeto foi originalmente inicializado com dados mock locais. Os arquivos de mock foram removidos e as páginas agora consomem uma API real quando disponível.
 
-**Exemplos**:
-- CTA: "Adicionar Alegria", "Espalhe Alegria!"
-- Empty cart: "Seu carrinho está vazio — talvez um brinquedo prefira você?"
-- Newsletter: "Receba mimos e 10% de desconto — prometo só coisas boas."
-- 404: "Ops — o mascote se perdeu. Vamos te levar pra casa."
+Configuração da API:
+- A base URL é configurada em `src/config/api.ts` e pode ser sobrescrita pela variável de ambiente `VITE_API_URL`.
+- Os métodos de leitura (GET) e de escrita (POST/PUT/DELETE) são expostos pelo cliente em `src/services/api.ts`.
 
----
-
-## 🤝 Contribuindo
-
-1. Fork o projeto
-2. Crie uma branch (`git checkout -b feature/NovaFeature`)
+Para desenvolvimento local sem backend, você pode executar um mock server (por exemplo `json-server`) ou apontar `VITE_API_URL` para um ambiente de testes.
 3. Commit suas mudanças (`git commit -m 'Add: Nova feature'`)
 4. Push para a branch (`git push origin feature/NovaFeature`)
 5. Abra um Pull Request

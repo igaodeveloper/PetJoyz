@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Filter, Search, X, ArrowDown, ArrowUp, ChevronDown, ChevronUp, ChevronRight, Clock, Zap, Tag, Check, Star, ArrowRight, Truck } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { Button } from '../components/ui/button';
+import AnimatedSection from '../components/AnimatedSection';
+import { buttonElevate } from '@/lib/animations'
 import { Input } from '../components/ui/input';
 import { Checkbox } from '../components/ui/checkbox';
 import { Label } from '../components/ui/label';
@@ -10,7 +12,6 @@ import { Slider } from '../components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import api from '../services/api';
-import { useEffect } from 'react';
 
 // Type definitions for the JSON data
 interface Category {
@@ -87,6 +88,7 @@ const OfertasPage = () => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoriesWithCounts, setCategoriesWithCounts] = useState<Category[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
   
   // Estado para a contagem regressiva
   const [timeLeft, setTimeLeft] = useState({
@@ -169,6 +171,7 @@ const OfertasPage = () => {
         }));
 
         setCategoriesWithCounts(updatedCategories as Category[]);
+        setBrands(bds as Brand[]);
         setFeaturedProducts(sortedByDiscount.slice(0, 4));
         setProducts(sortedByDiscount);
       } catch (e) {
@@ -273,48 +276,51 @@ const OfertasPage = () => {
   return (
     <div className="min-h-screen bg-soft-cream pt-28 pb-16">
       {/* Banner de Ofertas */}
-      <div className="bg-gradient-to-r from-joy-orange to-coral-red text-white py-6">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center mb-4 md:mb-0">
-              <Zap className="h-8 w-8 mr-3 animate-pulse" />
-              <h2 className="text-2xl font-bold">PROMOÇÕES RELÂMPAGO</h2>
-            </div>
-            <div className="flex items-center space-x-2 md:space-x-6">
-              <div className="text-center">
-                <div className="text-2xl font-bold bg-white/20 rounded-lg px-3 py-1 min-w-[50px]">
-                  {timeLeft.days}
-                </div>
-                <div className="text-xs mt-1">DIAS</div>
+      <AnimatedSection>
+        <div className="bg-gradient-to-r from-joy-orange to-coral-red text-white py-6">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col md:flex-row items-center justify-between">
+              <div className="flex items-center mb-4 md:mb-0">
+                <Zap className="h-8 w-8 mr-3 animate-pulse" />
+                <h2 className="text-2xl font-bold">PROMOÇÕES RELÂMPAGO</h2>
               </div>
-              <div className="text-2xl font-bold">:</div>
-              <div className="text-center">
-                <div className="text-2xl font-bold bg-white/20 rounded-lg px-3 py-1 min-w-[50px]">
-                  {timeLeft.hours.toString().padStart(2, '0')}
+              <div className="flex items-center space-x-2 md:space-x-6">
+                <div className="text-center">
+                  <div className="text-2xl font-bold bg-white/20 rounded-lg px-3 py-1 min-w-[50px]">
+                    {timeLeft.days}
+                  </div>
+                  <div className="text-xs mt-1">DIAS</div>
                 </div>
-                <div className="text-xs mt-1">HORAS</div>
-              </div>
-              <div className="text-2xl font-bold">:</div>
-              <div className="text-center">
-                <div className="text-2xl font-bold bg-white/20 rounded-lg px-3 py-1 min-w-[50px]">
-                  {timeLeft.minutes.toString().padStart(2, '0')}
+                <div className="text-2xl font-bold">:</div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold bg-white/20 rounded-lg px-3 py-1 min-w-[50px]">
+                    {timeLeft.hours.toString().padStart(2, '0')}
+                  </div>
+                  <div className="text-xs mt-1">HORAS</div>
                 </div>
-                <div className="text-xs mt-1">MIN</div>
-              </div>
-              <div className="text-2xl font-bold">:</div>
-              <div className="text-center">
-                <div className="text-2xl font-bold bg-white/20 rounded-lg px-3 py-1 min-w-[50px]">
-                  {timeLeft.seconds.toString().padStart(2, '0')}
+                <div className="text-2xl font-bold">:</div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold bg-white/20 rounded-lg px-3 py-1 min-w-[50px]">
+                    {timeLeft.minutes.toString().padStart(2, '0')}
+                  </div>
+                  <div className="text-xs mt-1">MIN</div>
                 </div>
-                <div className="text-xs mt-1">SEG</div>
+                <div className="text-2xl font-bold">:</div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold bg-white/20 rounded-lg px-3 py-1 min-w-[50px]">
+                    {timeLeft.seconds.toString().padStart(2, '0')}
+                  </div>
+                  <div className="text-xs mt-1">SEG</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </AnimatedSection>
 
       <div className="container mx-auto px-4 mt-8">
         {/* Page Header */}
+        <AnimatedSection className="text-center mb-12">
         <div className="text-center mb-12">
           <span className="inline-block bg-joy-orange/10 text-joy-orange text-sm font-medium px-4 py-1.5 rounded-full mb-4">
             <Zap className="inline-block h-4 w-4 mr-1 -mt-0.5" /> Ofertas Exclusivas
@@ -346,80 +352,83 @@ const OfertasPage = () => {
             </div>
           </div>
         </div>
+        </AnimatedSection>
 
         {/* Destaques */}
         {featuredProducts.length > 0 && (
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-deep-navy flex items-center">
-                <Zap className="h-6 w-6 text-joy-orange mr-2" />
-                Destaques da Semana
-              </h2>
-              <Link 
-                to="/produtos" 
-                className="text-joy-orange hover:text-deep-navy font-medium flex items-center transition-colors"
-              >
-                Ver todos <ArrowRight className="ml-1 h-4 w-4" />
-              </Link>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              {featuredProducts.map((product) => (
-                <div key={product.id} className="group relative overflow-hidden bg-white rounded-xl shadow-petjoy-soft hover:shadow-petjoy-crisp transition-all duration-300 hover:-translate-y-1">
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className="bg-coral-red text-white text-xs font-bold px-3 py-1 rounded-full">
-                      {Math.round(product.discount)}% OFF
-                    </span>
-                  </div>
-                  <Link to={`/produto/${product.slug}`} className="block">
-                    <div className="relative overflow-hidden aspect-square bg-soft-cream">
-                      <img
-                        src={product.image}
-                        alt={product.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
+          <AnimatedSection className="mb-12">
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-deep-navy flex items-center">
+                  <Zap className="h-6 w-6 text-joy-orange mr-2" />
+                  Destaques da Semana
+                </h2>
+                <Link
+                  to="/produtos"
+                  className="text-joy-orange hover:text-deep-navy font-medium flex items-center transition-colors"
+                >
+                  Ver todos <ArrowRight className="ml-1 h-4 w-4" />
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                {featuredProducts.map((product) => (
+                  <div key={product.id} className="group relative overflow-hidden bg-white rounded-xl shadow-petjoy-soft hover:shadow-petjoy-crisp transition-all duration-300 hover:-translate-y-1">
+                    <div className="absolute top-4 left-4 z-10">
+                      <span className="bg-coral-red text-white text-xs font-bold px-3 py-1 rounded-full">
+                        {Math.round(product.discount)}% OFF
+                      </span>
                     </div>
-                  </Link>
-                  <div className="p-4">
-                    <Link to={`/produto/${product.slug}`}>
-                      <h3 className="font-medium text-deep-navy mb-1 line-clamp-1 group-hover:text-joy-orange transition-colors">
-                        {product.title}
-                      </h3>
-                    </Link>
-                    <div className="flex items-center gap-1 mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-3 w-3 ${
-                            i < Math.floor(product.rating)
-                              ? 'fill-peach-blush text-peach-blush'
-                              : 'text-gray-300'
-                          }`}
+                    <Link to={`/produto/${product.slug}`} className="block">
+                      <div className="relative overflow-hidden aspect-square bg-soft-cream">
+                        <img
+                          src={product.image}
+                          alt={product.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
                         />
-                      ))}
-                    </div>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-lg font-bold text-deep-navy">
-                        {formatPrice(product.price)}
-                      </span>
-                      <span className="text-sm text-forest-green line-through">
-                        {formatPrice(product.originalPrice)}
-                      </span>
-                    </div>
-                    <div className="mt-3 flex items-center justify-between">
-                      <span className="inline-flex items-center text-xs text-forest-green">
-                        <Truck className="h-3 w-3 mr-1" /> Frete grátis
-                      </span>
-                      <Button size="sm" className="bg-joy-orange hover:bg-joy-orange/90 text-white text-sm">
-                        Comprar agora
-                      </Button>
+                      </div>
+                    </Link>
+                    <div className="p-4">
+                      <Link to={`/produto/${product.slug}`}>
+                        <h3 className="font-medium text-deep-navy mb-1 line-clamp-1 group-hover:text-joy-orange transition-colors">
+                          {product.title}
+                        </h3>
+                      </Link>
+                      <div className="flex items-center gap-1 mb-2">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-3 w-3 ${
+                              i < Math.floor(product.rating)
+                                ? 'fill-peach-blush text-peach-blush'
+                                : 'text-gray-300'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-lg font-bold text-deep-navy">
+                          {formatPrice(product.price)}
+                        </span>
+                        <span className="text-sm text-forest-green line-through">
+                          {formatPrice(product.originalPrice)}
+                        </span>
+                      </div>
+                      <div className="mt-3 flex items-center justify-between">
+                        <span className="inline-flex items-center text-xs text-forest-green">
+                          <Truck className="h-3 w-3 mr-1" /> Frete grátis
+                        </span>
+                        <Button size="sm" className="bg-joy-orange text-white text-sm" variants={buttonElevate} initial="rest" whileHover="hover" whileTap="tap">
+                          Comprar agora
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          </AnimatedSection>
         )}
 
         {/* Main Content */}
@@ -503,7 +512,7 @@ const OfertasPage = () => {
                   Marcas
                 </h3>
                 <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
-                  {brandsData.brands.map((brand) => (
+                  {brands.map((brand) => (
                     <div key={brand.id} className="flex items-center">
                       <Checkbox
                         id={`brand-${brand.id}`}
@@ -552,7 +561,7 @@ const OfertasPage = () => {
                 {selectedBrands.length > 0 || selectedCategories.length > 0 || priceRange[0] > 0 || priceRange[1] < 1000 ? (
                   <div className="flex flex-wrap gap-2 mt-2">
                     {selectedBrands.map(brandId => {
-                      const brand = brandsData.brands.find(b => b.id === brandId);
+                      const brand = brands.find(b => b.id === brandId);
                       return brand ? (
                         <span 
                           key={brandId}
@@ -569,7 +578,7 @@ const OfertasPage = () => {
                       ) : null;
                     })}
                     {selectedCategories.map(categoryId => {
-                      const category = categoriesData.find(c => c.id === categoryId);
+                      const category = categoriesWithCounts.find(c => c.id === categoryId);
                       return category ? (
                         <span 
                           key={categoryId}

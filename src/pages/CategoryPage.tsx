@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ChevronDown, SlidersHorizontal } from 'lucide-react';
 import Footer from '../components/Footer';
@@ -9,7 +9,8 @@ import { Sheet, SheetContent, SheetTrigger } from '../components/ui/sheet';
 import { Checkbox } from '../components/ui/checkbox';
 import { Slider } from '../components/ui/slider';
 import api from '../services/api';
-import { useEffect } from 'react';
+import AnimatedSection from '../components/AnimatedSection';
+import { buttonElevate } from '@/lib/animations'
 
 export default function CategoryPage() {
   const { slug } = useParams();
@@ -125,22 +126,24 @@ export default function CategoryPage() {
     <div className="min-h-screen bg-soft-cream">
 
       {/* Category Hero */}
-      <div className="bg-gradient-to-r from-joy-orange to-peach-blush py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 text-sm text-white/80 mb-4">
-            <Link to="/" className="hover:text-white">Home</Link>
-            <span>/</span>
-            <span className="text-white capitalize">{category?.name || slug}</span>
+      <AnimatedSection>
+        <div className="bg-gradient-to-r from-joy-orange to-peach-blush py-12">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center gap-2 text-sm text-white/80 mb-4">
+              <Link to="/" className="hover:text-white">Home</Link>
+              <span>/</span>
+              <span className="text-white capitalize">{category?.name || slug}</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
+              {category?.name || slug} {category?.icon}
+            </h1>
+            <p className="text-lg text-white/90">{category?.description}</p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
-            {category?.name || slug} {category?.icon}
-          </h1>
-          <p className="text-lg text-white/90">{category?.description}</p>
         </div>
-      </div>
+      </AnimatedSection>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
+          <AnimatedSection className="flex items-center justify-between mb-6">
           <p className="text-gray-600">
             {sortedProducts.length} produtos encontrados
           </p>
@@ -170,7 +173,7 @@ export default function CategoryPage() {
               </SheetContent>
             </Sheet>
           </div>
-        </div>
+          </AnimatedSection>
 
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Desktop Filters */}
