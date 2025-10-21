@@ -212,15 +212,28 @@ const OfertasPage = () => {
   // Filtrar produtos com base nos filtros selecionados
   const filteredProducts = useCallback(() => {
     return products.filter(product => {
+      // Ensure brand is a string before comparison
+      const productBrand = typeof product.brand === 'string' ? product.brand : '';
       const matchesBrand = selectedBrands.length === 0 || 
-                         (product.brand ? selectedBrands.includes(product.brand) : false);
+                         (productBrand && selectedBrands.includes(productBrand));
+      
+      // Ensure category is a string before comparison
+      const productCategory = typeof product.category === 'string' ? product.category : '';
       const matchesCategory = selectedCategories.length === 0 || 
-                           (product.category ? selectedCategories.includes(product.category) : false);
-      const productPrice = product.price ?? 0;
+                           (productCategory && selectedCategories.includes(productCategory));
+      
+      // Ensure price is a number
+      const productPrice = typeof product.price === 'number' ? product.price : 0;
       const matchesPrice = productPrice >= priceRange[0] && productPrice <= priceRange[1];
-      const matchesSearch = searchQuery === '' || 
-                         (product.title && product.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                         (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()));
+      
+      // Ensure search comparisons are done with strings
+      const searchTerm = typeof searchQuery === 'string' ? searchQuery.toLowerCase() : '';
+      const productTitle = typeof product.title === 'string' ? product.title.toLowerCase() : '';
+      const productDescription = typeof product.description === 'string' ? product.description.toLowerCase() : '';
+      
+      const matchesSearch = searchTerm === '' || 
+                         productTitle.includes(searchTerm) ||
+                         productDescription.includes(searchTerm);
       
       return matchesBrand && matchesCategory && matchesPrice && matchesSearch;
     });
@@ -231,22 +244,23 @@ const OfertasPage = () => {
     const filtered = filteredProducts();
     
     return [...filtered].sort((a, b) => {
-      const aPrice = a.price ?? 0;
-      const bPrice = b.price ?? 0;
-      const aDiscount = a.discount ?? 0;
-      const bDiscount = b.discount ?? 0;
-      const aRating = a.rating ?? 0;
-      const bRating = b.rating ?? 0;
+      // Ensure all values are numbers before comparison
+      const aPrice = typeof a.price === 'number' ? a.price : 0;
+      const bPrice = typeof b.price === 'number' ? b.price : 0;
+      const aDiscount = typeof a.discount === 'number' ? a.discount : 0;
+      const bDiscount = typeof b.discount === 'number' ? b.discount : 0;
+      const aRating = typeof a.rating === 'number' ? a.rating : 0;
+      const bRating = typeof b.rating === 'number' ? b.rating : 0;
       
       switch (sortBy) {
         case 'price-asc':
-          return aPrice - bPrice;
+          return Number(aPrice) - Number(bPrice);
         case 'price-desc':
-          return bPrice - aPrice;
+          return Number(bPrice) - Number(aPrice);
         case 'discount-desc':
-          return bDiscount - aDiscount;
+          return Number(bDiscount) - Number(aDiscount);
         case 'rating-desc':
-          return bRating - aRating;
+          return Number(bRating) - Number(aRating);
         default:
           return 0;
       }
@@ -393,10 +407,14 @@ const OfertasPage = () => {
                     <Link to={`/produto/${product.slug}`} className="block">
                       <div className="relative overflow-hidden aspect-square bg-soft-cream">
                         <img
-                          src={product.image}
+                          src={product.image || product.images?.[0] || ''}
                           alt={product.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           loading="lazy"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = '/images/placeholder-product.jpg';
+                          }}
                         />
                       </div>
                     </Link>
@@ -643,70 +661,23 @@ const OfertasPage = () => {
               </div>
             </div>
 
-            {/* Products */}
-            {sortedProducts().length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedProducts().map((product) => (
-                  <div key={product.id} className="group relative overflow-hidden bg-white rounded-xl shadow-petjoy-soft hover:shadow-petjoy-crisp transition-all duration-300 hover:-translate-y-1">
-                    <div className="absolute top-4 left-4 z-10">
-                      <span className="bg-coral-red text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                        {Math.round(product.discount)}% OFF
-                      </span>
-                    </div>
-                    <Link to={`/produto/${product.slug}`} className="block">
-                      <div className="relative overflow-hidden aspect-square bg-soft-cream">
-                        <img
-                          src={product.image}
-                          alt={product.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                      </div>
-                    </Link>
-                    <div className="p-4">
-                      <Link to={`/produto/${product.slug}`}>
-                        <h3 className="font-medium text-deep-navy mb-1 line-clamp-1 group-hover:text-joy-orange transition-colors">
-                          {product.title}
-                        </h3>
-                      </Link>
-                      <div className="flex items-center gap-1 mb-2">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-3 w-3 ${
-                              i < Math.floor(product.rating)
-                                ? 'fill-peach-blush text-peach-blush'
-                                : 'text-gray-300'
-                            }`}
-                          />
-                        ))}
-                        <span className="text-xs text-gray-500 ml-1">
-                          ({Math.floor(Math.random() * 100) + 1})
-                        </span>
-                      </div>
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-lg font-bold text-deep-navy">
-                          {formatPrice(product.price)}
-                        </span>
-                        <span className="text-sm text-forest-green line-through">
-                          {formatPrice(product.originalPrice)}
-                        </span>
-                        <span className="ml-auto text-sm font-medium text-coral-red">
-                          Economize {Math.round((product.originalPrice - product.price) / 100 * 10) / 10}%
-                        </span>
-                      </div>
-                      <div className="mt-3 pt-3 border-t border-gray-100">
-                        <div className="flex items-center justify-between">
-                          <span className="inline-flex items-center text-xs text-forest-green">
-                            <Truck className="h-3 w-3 mr-1" /> Frete grátis
-                          </span>
-                          <Button size="sm" className="bg-joy-orange hover:bg-joy-orange/90 text-white text-sm h-8">
-                            Adicionar
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            {/* Products Grid */}
+            {filteredProducts().length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
+                {filteredProducts().map((product) => (
+                  <ProductCard 
+                    key={product.id}
+                    id={product.id}
+                    title={product.title}
+                    slug={product.slug}
+                    price={product.price}
+                    originalPrice={product.originalPrice}
+                    discount={product.discount}
+                    images={product.images}
+                    rating={product.rating}
+                    reviewCount={product.reviewCount}
+                    badges={product.badges}
+                  />
                 ))}
               </div>
             ) : (
