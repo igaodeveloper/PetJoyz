@@ -36,26 +36,40 @@ const buttonVariants = cva(
   }
 )
 
+type MotionProps = {
+  variants?: any;
+  initial?: string;
+  whileHover?: string;
+  whileTap?: string;
+  [key: string]: any;
+};
+
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onAnimationStart' | 'onDragStart' | 'onDragEnd' | 'onDrag' | 'ref'>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+  asChild?: boolean;
+  motionProps?: MotionProps;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : motion.button
+  ({ className, variant, size, asChild = false, motionProps, ...props }, ref) => {
+    const Comp = asChild ? Slot : motion.button;
+    const motionPropsToUse = asChild ? {} : {
+      variants: pop,
+      initial: "rest",
+      whileHover: "hover",
+      whileTap: "tap",
+      ...motionProps
+    };
+    
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref as any}
-        variants={pop}
-        initial="rest"
-        whileHover="hover"
-        whileTap="tap"
-        {...(props as any)}
+        ref={ref}
+        {...motionPropsToUse}
+        {...props}
       />
-    )
+    );
   }
 )
 Button.displayName = "Button"

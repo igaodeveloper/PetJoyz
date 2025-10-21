@@ -111,7 +111,7 @@ export default function ProductDetail() {
               />
             </div>
             <div className="grid grid-cols-4 gap-3">
-              {product.images.map((image, index) => (
+              {product.images.map((image: string, index: number) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
@@ -129,7 +129,7 @@ export default function ProductDetail() {
             <div className="space-y-6">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                {product.badges.map((badge) => (
+                {product.badges.map((badge: string) => (
                   <Badge
                     key={badge}
                     className={`${
@@ -174,7 +174,7 @@ export default function ProductDetail() {
               <div className="space-y-3">
                 <label className="font-semibold text-deep-navy">Tamanho:</label>
                 <div className="flex gap-2">
-                  {product.variants.map((variant, index) => (
+                  {product.variants.map((variant: { id: string; name: string; }, index: number) => (
                     <button
                       key={index}
                       onClick={() => setSelectedVariant(index)}

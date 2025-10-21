@@ -69,8 +69,9 @@ interface FilterOption {
   count: number;
 }
 
-// Função para formatar o preço
-const formatPrice = (price: number) => {
+// Função para formatar o preço com valor padrão
+const formatPrice = (price: number | undefined) => {
+  if (price === undefined) return 'R$ 0,00';
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
@@ -147,8 +148,8 @@ const OfertasPage = () => {
           .filter((product) => (product.discount || 0) > 0)
           .map((product) => ({
             ...product,
-            originalPrice: product.originalPrice || Math.round(product.price / (1 - (product.discount || 0) / 100)),
-            discount: product.discount || 0,
+            originalPrice: product.originalPrice ?? 0,
+            discount: product.discount ?? 0,
             image: product.images?.[0] || '',
             badges: product.badges || [],
             tags: product.tags || [],
@@ -211,11 +212,14 @@ const OfertasPage = () => {
   // Filtrar produtos com base nos filtros selecionados
   const filteredProducts = useCallback(() => {
     return products.filter(product => {
-      const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
-      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
-      const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+      const matchesBrand = selectedBrands.length === 0 || 
+                         (product.brand ? selectedBrands.includes(product.brand) : false);
+      const matchesCategory = selectedCategories.length === 0 || 
+                           (product.category ? selectedCategories.includes(product.category) : false);
+      const productPrice = product.price ?? 0;
+      const matchesPrice = productPrice >= priceRange[0] && productPrice <= priceRange[1];
       const matchesSearch = searchQuery === '' || 
-                         product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         (product.title && product.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
                          (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()));
       
       return matchesBrand && matchesCategory && matchesPrice && matchesSearch;
@@ -227,15 +231,22 @@ const OfertasPage = () => {
     const filtered = filteredProducts();
     
     return [...filtered].sort((a, b) => {
+      const aPrice = a.price ?? 0;
+      const bPrice = b.price ?? 0;
+      const aDiscount = a.discount ?? 0;
+      const bDiscount = b.discount ?? 0;
+      const aRating = a.rating ?? 0;
+      const bRating = b.rating ?? 0;
+      
       switch (sortBy) {
         case 'price-asc':
-          return a.price - b.price;
+          return aPrice - bPrice;
         case 'price-desc':
-          return b.price - a.price;
+          return bPrice - aPrice;
         case 'discount-desc':
-          return b.discount - a.discount;
+          return bDiscount - aDiscount;
         case 'rating-desc':
-          return b.rating - a.rating;
+          return bRating - aRating;
         default:
           return 0;
       }
@@ -376,7 +387,7 @@ const OfertasPage = () => {
                   <div key={product.id} className="group relative overflow-hidden bg-white rounded-xl shadow-petjoy-soft hover:shadow-petjoy-crisp transition-all duration-300 hover:-translate-y-1">
                     <div className="absolute top-4 left-4 z-10">
                       <span className="bg-coral-red text-white text-xs font-bold px-3 py-1 rounded-full">
-                        {Math.round(product.discount)}% OFF
+                        {Math.round(product.discount ?? 0)}% OFF
                       </span>
                     </div>
                     <Link to={`/produto/${product.slug}`} className="block">
@@ -411,15 +422,21 @@ const OfertasPage = () => {
                         <span className="text-lg font-bold text-deep-navy">
                           {formatPrice(product.price)}
                         </span>
-                        <span className="text-sm text-forest-green line-through">
-                          {formatPrice(product.originalPrice)}
-                        </span>
+                        {product.originalPrice && (
+                          <span className="text-sm text-forest-green line-through">
+                            {formatPrice(product.originalPrice)}
+                          </span>
+                        )}
                       </div>
                       <div className="mt-3 flex items-center justify-between">
                         <span className="inline-flex items-center text-xs text-forest-green">
                           <Truck className="h-3 w-3 mr-1" /> Frete grátis
                         </span>
-                        <Button size="sm" className="bg-joy-orange text-white text-sm" variants={buttonElevate} initial="rest" whileHover="hover" whileTap="tap">
+                        <Button 
+                  size="sm" 
+                  className="bg-joy-orange text-white text-sm"
+                  motionProps={buttonElevate}
+                >
                           Comprar agora
                         </Button>
                       </div>
