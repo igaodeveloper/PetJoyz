@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Filter, Search, X, ArrowDown, ArrowUp, ChevronDown, ChevronUp, ChevronRight, Clock, Zap, Tag, Check, Star, ArrowRight, Truck } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
@@ -43,6 +43,14 @@ interface Brand {
 const typedCategories: Category[] = [];
 let typedBrands: Brand[] = [];
 
+interface ProductVariant {
+  id: string;
+  name: string;
+  price: number;
+  stock: number;
+  [key: string]: any;
+}
+
 interface Product {
   id: string;
   title: string;
@@ -57,14 +65,7 @@ interface Product {
   rating: number;
   reviewCount: number;
   stock: number;
-  variants: {
-    id: string;
-    name: string;
-    price: number;
-    stock: number;
-    [key: string]: any;
-  }[];
-  // Optional fields with default values
+  variants: ProductVariant[];
   originalPrice?: number;
   discount?: number;
   brand?: string;
@@ -465,13 +466,14 @@ const OfertasPage: React.FC = () => {
                     <Link to={`/produto/${product.slug}`} className="block">
                       <div className="relative overflow-hidden aspect-square bg-soft-cream">
                         <img
-                          src={product.image || product.images?.[0] || ''}
-                          alt={product.title}
+                          src={product.image || product.images?.[0] || '/images/placeholder-product.jpg'}
+                          alt={product.title || 'Produto'}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           loading="lazy"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.src = '/images/placeholder-product.jpg';
+                            target.alt = 'Imagem não disponível';
                           }}
                         />
                       </div>
@@ -651,7 +653,7 @@ const OfertasPage: React.FC = () => {
                     <span className="text-deep-navy/80"> em {selectedBrands.length} {selectedBrands.length === 1 ? 'marca' : 'marcas'}</span>
                   )}
                 </p>
-                {selectedBrands.length > 0 || selectedCategories.length > 0 || priceRange[0] > 0 || priceRange[1] < 1000 ? (
+                {(selectedBrands.length > 0 || selectedCategories.length > 0 || priceRange[0] > 0 || priceRange[1] < 1000) && (
                   <div className="flex flex-wrap gap-2 mt-2">
                     {selectedBrands.map(brandId => {
                       const brand = brands.find(b => b.id === brandId);
@@ -699,24 +701,25 @@ const OfertasPage: React.FC = () => {
                       </span>
                     )}
                   </div>
-                ) : null}
+                )}
               </div>
-              <div className="flex items-center gap-2">
-                <Label htmlFor="sort" className="text-forest-green whitespace-nowrap text-sm">
-                  Ordenar por:
-                </Label>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-[180px] bg-white border-forest-green/20 hover:border-joy-orange/50">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="discount-desc" className="focus:bg-joy-orange/10">Maior Desconto</SelectItem>
-                    <SelectItem value="price-asc" className="focus:bg-joy-orange/10">Menor Preço</SelectItem>
-                    <SelectItem value="price-desc" className="focus:bg-joy-orange/10">Maior Preço</SelectItem>
-                    <SelectItem value="rating-desc" className="focus:bg-joy-orange/10">Melhor Avaliados</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <label htmlFor="sort" className="text-sm font-medium text-deep-navy mr-2 whitespace-nowrap">
+                Ordenar por:
+              </label>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-[180px] border-deep-navy/20 focus:ring-2 focus:ring-joy-orange/50 focus:border-joy-orange">
+                  <SelectValue placeholder="Selecione" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="discount-desc">Maior desconto</SelectItem>
+                  <SelectItem value="price-asc">Menor preço</SelectItem>
+                  <SelectItem value="price-desc">Maior preço</SelectItem>
+                  <SelectItem value="name-asc">Nome (A-Z)</SelectItem>
+                  <SelectItem value="name-desc">Nome (Z-A)</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Products Grid */}
@@ -771,6 +774,7 @@ const OfertasPage: React.FC = () => {
                 type="email" 
                 placeholder="Seu melhor e-mail" 
                 className="flex-1 bg-white border-gray-200 focus:border-joy-orange focus:ring-joy-orange/50"
+                aria-label="Digite seu e-mail para receber ofertas"
               />
               <Button className="bg-joy-orange hover:bg-joy-orange/90 text-white whitespace-nowrap">
                 Quero receber ofertas
