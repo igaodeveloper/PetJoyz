@@ -24,7 +24,15 @@ export default function CartPage() {
           <h1 className="text-3xl font-bold text-deep-navy mb-4">Seu carrinho está vazio</h1>
           <p className="text-gray-600 mb-8">Parece que você ainda não adicionou nenhum produto ao carrinho.</p>
           <Link to="/produtos">
-            <Button className="bg-joy-orange text-white" variants={buttonElevate} initial="rest" whileHover="hover" whileTap="tap">
+            <Button 
+              className="bg-joy-orange text-white" 
+              motionProps={{
+                variants: buttonElevate,
+                initial: "rest",
+                whileHover: "hover",
+                whileTap: "tap"
+              }}
+            >
               Ver Produtos
             </Button>
           </Link>
@@ -158,7 +166,15 @@ export default function CartPage() {
               </div>
               
               <Link to="/pagamento" className="w-full block">
-                <Button className="w-full mt-6 bg-joy-orange text-white h-12 text-lg" variants={buttonElevate} initial="rest" whileHover="hover" whileTap="tap">
+                <Button 
+                  className="w-full mt-6 bg-joy-orange text-white h-12 text-lg"
+                  motionProps={{
+                    variants: buttonElevate,
+                    initial: "rest",
+                    whileHover: "hover",
+                    whileTap: "tap"
+                  }}
+                >
                   Finalizar Compra
                 </Button>
               </Link>

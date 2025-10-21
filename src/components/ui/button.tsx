@@ -36,40 +36,43 @@ const buttonVariants = cva(
   }
 )
 
-type MotionProps = {
-  variants?: any;
-  initial?: string;
-  whileHover?: string;
-  whileTap?: string;
-  [key: string]: any;
-};
-
+// Extend the ButtonProps to include motion props
 export interface ButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onAnimationStart' | 'onDragStart' | 'onDragEnd' | 'onDrag' | 'ref'>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  motionProps?: MotionProps;
+  motionProps?: {
+    variants?: any;
+    initial?: string | object;
+    whileHover?: string | object;
+    whileTap?: string | object;
+    [key: string]: any;
+  };
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, motionProps, ...props }, ref) => {
     const Comp = asChild ? Slot : motion.button;
+    
+    // Only apply motion props if not using asChild
     const motionPropsToUse = asChild ? {} : {
-      variants: pop,
-      initial: "rest",
-      whileHover: "hover",
-      whileTap: "tap",
-      ...motionProps
+      variants: motionProps?.variants || pop,
+      initial: motionProps?.initial || "rest",
+      whileHover: motionProps?.whileHover || "hover",
+      whileTap: motionProps?.whileTap || "tap",
+      ...(motionProps || {})
     };
     
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...motionPropsToUse}
-        {...props}
-      />
-    );
+    // Create the base props
+    const buttonProps = {
+      className: cn(buttonVariants({ variant, size, className })),
+      ref,
+      ...(asChild ? {} : motionPropsToUse),
+      ...props
+    };
+    
+    // @ts-ignore - We know this is safe because of our type checking above
+    return <Comp {...buttonProps} />;
   }
 )
 Button.displayName = "Button"

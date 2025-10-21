@@ -276,10 +276,12 @@ export default function Header() {
                           size="icon"
                           className="text-joy-orange hover:bg-joy-orange/10 h-8 w-8 rounded-full"
                           aria-label="Buscar"
-                          variants={buttonElevate}
-                          initial="rest"
-                          whileHover="hover"
-                          whileTap="tap"
+                          motionProps={{
+                            variants: buttonElevate,
+                            initial: "rest",
+                            whileHover: "hover",
+                            whileTap: "tap"
+                          }}
                         >
                           <SearchIcon className="h-4 w-4" />
                         </Button>
@@ -298,6 +300,12 @@ export default function Header() {
                       size="icon"
                       className="text-deep-navy hover:text-joy-orange hover:bg-joy-orange/10"
                       aria-label="Abrir busca"
+                      motionProps={{
+                        variants: buttonElevate,
+                        initial: "rest",
+                        whileHover: "hover",
+                        whileTap: "tap"
+                      }}
                       onClick={handleSearchClick}
                     >
                       <Search className="h-5 w-5" />
@@ -317,11 +325,13 @@ export default function Header() {
                 size="icon"
                 className="text-deep-navy hover:text-joy-orange relative"
                 aria-label="Carrinho"
+                motionProps={{
+                  variants: buttonElevate,
+                  initial: "rest",
+                  whileHover: "hover",
+                  whileTap: "tap"
+                }}
                 onClick={() => navigate('/carrinho')}
-                variants={buttonElevate}
-                initial="rest"
-                whileHover="hover"
-                whileTap="tap"
               >
                 <ShoppingCart className="h-5 w-5" />
                 <AnimatePresence>
@@ -348,10 +358,12 @@ export default function Header() {
                 size="icon"
                 className="text-deep-navy hover:text-joy-orange"
                 aria-label="Conta"
-                variants={buttonElevate}
-                initial="rest"
-                whileHover="hover"
-                whileTap="tap"
+                motionProps={{
+                  variants: buttonElevate,
+                  initial: "rest",
+                  whileHover: "hover",
+                  whileTap: "tap"
+                }}
                 onClick={() => navigate('/perfil')}
               >
                 <User className="h-5 w-5" />
@@ -363,7 +375,17 @@ export default function Header() {
             <motion.div className="lg:hidden" whileHover={buttonHover} whileTap={buttonTap}>
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="Menu" variants={buttonElevate} initial="rest" whileHover="hover" whileTap="tap">
+                  <Button 
+                variant="ghost" 
+                size="icon" 
+                aria-label="Menu"
+                motionProps={{
+                  variants: buttonElevate,
+                  initial: "rest",
+                  whileHover: "hover",
+                  whileTap: "tap"
+                }}
+              >
                     <AnimatePresence mode="wait">
                       <motion.div
                         key="menu-icon"
