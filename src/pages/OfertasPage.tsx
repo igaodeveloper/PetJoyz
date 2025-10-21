@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Filter, Search, X, ArrowDown, ArrowUp, ChevronDown, ChevronUp, ChevronRight, Clock, Zap, Tag, Check, Star, ArrowRight, Truck } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { Button } from '../components/ui/button';
 import AnimatedSection from '../components/AnimatedSection';
-import { buttonElevate } from '@/lib/animations'
+import { buttonElevate } from '../lib/animations';
 import { Input } from '../components/ui/input';
 import { Checkbox } from '../components/ui/checkbox';
 import { Label } from '../components/ui/label';
@@ -12,6 +12,14 @@ import { Slider } from '../components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import api from '../services/api';
+
+// Type for time left in countdown
+interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
 
 // Type definitions for the JSON data
 interface Category {
@@ -78,139 +86,189 @@ const formatPrice = (price: number | undefined) => {
   }).format(price / 100);
 };
 
-const OfertasPage = () => {
+const OfertasPage: React.FC = () => {
+  // State declarations with proper types
   const [products, setProducts] = useState<Product[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState('discount-desc');
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState<string>('discount-desc');
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [categoriesWithCounts, setCategoriesWithCounts] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   
-  // Estado para a contagem regressiva
-  const [timeLeft, setTimeLeft] = useState({
+  // Countdown timer state
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0
   });
 
-  // Configurar contagem regressiva
+  // Countdown timer effect
   useEffect(() => {
-    const calculateTimeLeft = () => {
-      const now = new Date();
-      // Definir o fim da oferta para 7 dias a partir de agora
-      const endDate = new Date(now);
-      endDate.setDate(now.getDate() + 7);
-      
-      const difference = endDate.getTime() - now.getTime();
-      
+    const calculateTimeLeft = (): void => {
+      const difference = +new Date('2025-12-31') - +new Date();
+      let timeLeft: TimeLeft = {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0
+      };
+
       if (difference > 0) {
-        setTimeLeft({
+        timeLeft = {
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
           hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
           minutes: Math.floor((difference / 1000 / 60) % 60),
           seconds: Math.floor((difference / 1000) % 60)
-        });
+        };
       }
+
+      setTimeLeft(timeLeft);
     };
 
     const timer = setInterval(calculateTimeLeft, 1000);
+    // Initial call to set the time immediately
     calculateTimeLeft();
+    // Cleanup interval on component unmount
     return () => clearInterval(timer);
   }, []);
 
-  // Carregar produtos em oferta
+  // Load products on component mount
   useEffect(() => {
-    let mounted = true;
-    const loadProducts = async () => {
+    let isMounted = true;
+    
+    const loadProducts = async (): Promise<void> => {
       try {
         setLoading(true);
-        // fetch products, categories, brands
+        
+        // Fetch products, categories, and brands in parallel
         const [allProducts, categories, brands] = await Promise.all([
-          api.getSpecialOffers(200).catch(() => []),
-          api.getCategories().catch(() => []),
-          api.getBrands().catch(() => [])
+          api.getSpecialOffers(200).catch<unknown[]>(() => []),
+          api.getCategories().catch<unknown[]>(() => []),
+          api.getBrands().catch<unknown[]>(() => [])
         ]);
 
-        if (!mounted) return;
+        if (!isMounted) return;
 
-        // normalize brands and categories
-        const cats = (categories as any[]) || [];
-        const bds = (brands as any[]) || [];
+        // Type assertions for API responses
+        const cats = Array.isArray(categories) ? categories : [];
+        const bds = Array.isArray(brands) ? brands : [];
 
-        // Map products to expected Product shape and compute discounts
-        const discountedProducts = (allProducts as any[])
-          .filter((product) => (product.discount || 0) > 0)
-          .map((product) => ({
-            ...product,
-            originalPrice: product.originalPrice ?? 0,
-            discount: product.discount ?? 0,
-            image: product.images?.[0] || '',
-            badges: product.badges || [],
-            tags: product.tags || [],
-            variants: product.variants || [],
-            reviewCount: product.reviewCount || 0,
-            rating: product.rating || 0,
-            stock: product.stock || 0
-          })) as Product[];
+        // Process and filter products
+        const discountedProducts = (Array.isArray(allProducts) ? allProducts : [])
+          .filter((product: any) => (product?.discount || 0) > 0)
+          .map((product: any): Product => ({
+            id: String(product.id || ''),
+            title: String(product.title || ''),
+            slug: String(product.slug || ''),
+            description: String(product.description || ''),
+            price: Number(product.price) || 0,
+            currency: 'BRL',
+            images: Array.isArray(product.images) ? product.images : [],
+            category: String(product.category || ''),
+            badges: Array.isArray(product.badges) ? product.badges : [],
+            tags: Array.isArray(product.tags) ? product.tags : [],
+            rating: Number(product.rating) || 0,
+            reviewCount: Number(product.reviewCount) || 0,
+            stock: Number(product.stock) || 0,
+            variants: Array.isArray(product.variants) ? product.variants : [],
+            originalPrice: Number(product.originalPrice) || 0,
+            discount: Number(product.discount) || 0,
+            brand: String(product.brand || ''),
+            image: product.images?.[0] || ''
+          }));
 
-        const sortedByDiscount = [...discountedProducts].sort((a, b) => (b.discount || 0) - (a.discount || 0));
+        // Sort products by discount
+        const sortedByDiscount = [...discountedProducts].sort(
+          (a, b) => (b.discount || 0) - (a.discount || 0)
+        );
 
-        const categoryCounts: { [key: string]: number } = {};
+        // Calculate category counts
+        const categoryCounts: Record<string, number> = {};
         sortedByDiscount.forEach(product => {
-          categoryCounts[product.category] = (categoryCounts[product.category] || 0) + 1;
+          if (product.category) {
+            categoryCounts[product.category] = (categoryCounts[product.category] || 0) + 1;
+          }
         });
 
-        const updatedCategories = cats.map((category: any) => ({
-          ...category,
-          count: categoryCounts[category.id] || 0
-        }));
+        // Update categories with counts
+        const updatedCategories = cats
+          .filter((cat: any) => cat?.id)
+          .map((category: any) => ({
+            id: String(category.id),
+            name: String(category.name || ''),
+            slug: String(category.slug || ''),
+            description: String(category.description || ''),
+            icon: String(category.icon || ''),
+            count: categoryCounts[String(category.id)] || 0
+          }));
 
-        setCategoriesWithCounts(updatedCategories as Category[]);
-        setBrands(bds as Brand[]);
+        // Update brands with proper typing
+        const formattedBrands = bds
+          .filter((brand: any) => brand?.id)
+          .map((brand: any) => ({
+            id: String(brand.id),
+            name: String(brand.name || ''),
+            count: Number(brand.count) || 0,
+            slug: String(brand.slug || ''),
+            logo: String(brand.logo || '')
+          }));
+
+        // Update state
+        setCategoriesWithCounts(updatedCategories);
+        setBrands(formattedBrands);
         setFeaturedProducts(sortedByDiscount.slice(0, 4));
         setProducts(sortedByDiscount);
-      } catch (e) {
-        // fallback to empty
-        if (mounted) {
+      } catch (error) {
+        console.error('Error loading products:', error);
+        if (isMounted) {
           setCategoriesWithCounts([]);
           setFeaturedProducts([]);
           setProducts([]);
         }
       } finally {
-        if (mounted) setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
-    loadProducts();
-    return () => { mounted = false; };
+    loadProducts().catch(console.error);
+    
+    // Cleanup function
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  // Função para alternar filtro de marca
-  const handleBrandToggle = (brandId: string) => {
+  // Toggle brand filter
+  const handleBrandToggle = (brandId: string): void => {
     setSelectedBrands(prev => 
       prev.includes(brandId) 
         ? prev.filter(id => id !== brandId)
         : [...prev, brandId]
     );
+    // Reset to first page when filters change
+    // setCurrentPage(1);
   };
 
-  // Função para alternar filtro de categoria
-  const handleCategoryToggle = (categoryId: string) => {
+  // Toggle category filter
+  const handleCategoryToggle = (categoryId: string): void => {
     setSelectedCategories(prev => 
       prev.includes(categoryId)
         ? prev.filter(id => id !== categoryId)
         : [...prev, categoryId]
     );
+    // Reset to first page when filters change
+    // setCurrentPage(1);
   };
 
   // Filtrar produtos com base nos filtros selecionados
-  const filteredProducts = useCallback(() => {
+  const getFilteredProducts = useCallback((): Product[] => {
+    if (!products) return [];
     return products.filter(product => {
       // Ensure brand is a string before comparison
       const productBrand = typeof product.brand === 'string' ? product.brand : '';
@@ -239,10 +297,17 @@ const OfertasPage = () => {
     });
   }, [products, selectedBrands, selectedCategories, priceRange, searchQuery]);
 
-  // Ordenar produtos
-  const sortedProducts = useCallback(() => {
-    const filtered = filteredProducts();
-    
+  // Get filtered products
+  const filtered = useMemo(() => getFilteredProducts(), [
+    products, 
+    selectedBrands, 
+    selectedCategories, 
+    priceRange, 
+    searchQuery
+  ]);
+
+  // Sort filtered products
+  const filteredProducts: Product[] = useMemo(() => {
     return [...filtered].sort((a, b) => {
       // Ensure all values are numbers before comparison
       const aPrice = typeof a.price === 'number' ? a.price : 0;
@@ -254,18 +319,18 @@ const OfertasPage = () => {
       
       switch (sortBy) {
         case 'price-asc':
-          return Number(aPrice) - Number(bPrice);
+          return aPrice - bPrice;
         case 'price-desc':
-          return Number(bPrice) - Number(aPrice);
+          return bPrice - aPrice;
         case 'discount-desc':
-          return Number(bDiscount) - Number(aDiscount);
+          return bDiscount - aDiscount;
         case 'rating-desc':
-          return Number(bRating) - Number(aRating);
+          return bRating - aRating;
         default:
           return 0;
       }
     });
-  }, [filteredProducts, sortBy]);
+  }, [filtered, sortBy]);
 
   // Componente de loading
   const LoadingSkeleton = () => (
@@ -305,23 +370,16 @@ const OfertasPage = () => {
         <div className="bg-gradient-to-r from-joy-orange to-coral-red text-white py-6">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center justify-between">
-              <div className="flex items-center mb-4 md:mb-0">
-                <Zap className="h-8 w-8 mr-3 animate-pulse" />
-                <h2 className="text-2xl font-bold">PROMOÇÕES RELÂMPAGO</h2>
+              <div className="text-center md:text-left mb-4 md:mb-0">
+                <h1 className="text-2xl md:text-3xl font-bold mb-2">Ofertas Relâmpago</h1>
+                <p className="text-orange-100">Descontos imperdíveis por tempo limitado</p>
               </div>
-              <div className="flex items-center space-x-2 md:space-x-6">
-                <div className="text-center">
-                  <div className="text-2xl font-bold bg-white/20 rounded-lg px-3 py-1 min-w-[50px]">
-                    {timeLeft.days}
-                  </div>
-                  <div className="text-xs mt-1">DIAS</div>
-                </div>
-                <div className="text-2xl font-bold">:</div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold bg-white/20 rounded-lg px-3 py-1 min-w-[50px]">
-                    {timeLeft.hours.toString().padStart(2, '0')}
-                  </div>
-                  <div className="text-xs mt-1">HORAS</div>
+              <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full">
+                <div className="flex items-center space-x-1">
+                  <Clock className="h-5 w-5 text-white/90" />
+                  <span className="font-mono text-xl font-bold tracking-wider">
+                    {timeLeft?.days || 0}d {timeLeft?.hours || 0}h {timeLeft?.minutes || 0}m {timeLeft?.seconds || 0}s
+                  </span>
                 </div>
                 <div className="text-2xl font-bold">:</div>
                 <div className="text-center">
@@ -588,7 +646,7 @@ const OfertasPage = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 bg-white p-4 rounded-xl shadow-petjoy-soft">
               <div>
                 <p className="text-forest-green">
-                  Mostrando <span className="font-bold text-deep-navy">{filteredProducts().length}</span> {filteredProducts().length === 1 ? 'oferta' : 'ofertas'}
+                  Mostrando <span className="font-bold text-deep-navy">{filteredProducts.length}</span> {filteredProducts.length === 1 ? 'oferta' : 'ofertas'}
                   {selectedBrands.length > 0 && (
                     <span className="text-deep-navy/80"> em {selectedBrands.length} {selectedBrands.length === 1 ? 'marca' : 'marcas'}</span>
                   )}
@@ -662,9 +720,9 @@ const OfertasPage = () => {
             </div>
 
             {/* Products Grid */}
-            {filteredProducts().length > 0 ? (
+            {filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
-                {filteredProducts().map((product) => (
+                {filteredProducts.map((product: Product) => (
                   <ProductCard 
                     key={product.id}
                     id={product.id}
@@ -682,32 +740,17 @@ const OfertasPage = () => {
               </div>
             ) : (
               <div className="bg-white rounded-xl p-12 text-center shadow-petjoy-soft">
-                <div className="w-20 h-20 bg-joy-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Search className="h-10 w-10 text-joy-orange" />
-                </div>
-                <h3 className="text-xl font-semibold text-deep-navy mb-2">Nenhuma oferta encontrada</h3>
-                <p className="text-forest-green mb-6 max-w-md mx-auto">
-                  Não encontramos produtos que correspondam aos filtros selecionados. Tente ajustar os filtros ou limpar tudo para ver todas as ofertas disponíveis.
-                </p>
-                <div className="flex gap-3 justify-center">
-                  <Button
-                    variant="outline"
-                    className="border-joy-orange text-joy-orange hover:bg-joy-orange/10"
-                    onClick={() => {
-                      setSelectedBrands([]);
-                      setSelectedCategories([]);
-                      setPriceRange([0, 1000]);
-                      setSearchQuery('');
-                    }}
-                  >
-                    <X className="h-4 w-4 mr-1" /> Limpar Filtros
-                  </Button>
-                  <Link to="/produtos">
-                    <Button className="bg-joy-orange hover:bg-joy-orange/90 text-white">
-                      Ver todos os produtos
-                    </Button>
-                  </Link>
-                </div>
+                <p className="text-gray-600 mb-4">Nenhum produto encontrado com os filtros atuais.</p>
+                <Button 
+                  variant="outline" 
+                  className="border-joy-orange text-joy-orange hover:bg-joy-orange/10"
+                  onClick={() => {
+                    setSelectedBrands([]);
+                    setSelectedCategories([]);
+                  }}
+                >
+                  Limpar filtros
+                </Button>
               </div>
             )}
           </div>
