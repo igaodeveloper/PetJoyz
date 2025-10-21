@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
 import FavoritosPage from "./pages/FavoritosPage";
 import PaymentPage from "./pages/PaymentPage";
+import ProfilePage from "./pages/ProfilePage";
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
 import Dashboard from './pages/admin/Dashboard';
@@ -41,6 +42,7 @@ function App() {
           <Route path="/ofertas" element={<OfertasPage />} />
           <Route path="/sobre" element={<SobrePage />} />
           <Route path="/carrinho" element={<CartPage />} />
+          <Route path="/perfil" element={<ProfilePage />} />
           <Route path="/pagamento" element={<PaymentPage />} />
           <Route path="/favoritos" element={<FavoritosPage />} />
           <Route path="/produto/:slug" element={<ProductDetail />} />

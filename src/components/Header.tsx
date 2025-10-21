@@ -352,6 +352,7 @@ export default function Header() {
                 initial="rest"
                 whileHover="hover"
                 whileTap="tap"
+                onClick={() => navigate('/perfil')}
               >
                 <User className="h-5 w-5" />
               </Button>
