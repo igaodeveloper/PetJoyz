@@ -91,7 +91,7 @@ const values = [
 // Testimonials data
 const testimonials = [
   {
-    quote: "A PetJoy mudou a vida do meu cachorro! Os produtos são incríveis e o atendimento é excepcional.",
+    quote: "A Focinhus mudou a vida do meu cachorro! Os produtos são incríveis e o atendimento é excepcional.",
     author: "Mariana S.",
     rating: 5
   },
@@ -129,7 +129,7 @@ export default function SobrePage() {
             transition={{ duration: 0.8 }}
             className="max-w-3xl mx-auto text-center"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-primary">Sobre a PetJoy</h1>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-primary">Sobre a Focinhus</h1>
             <p className="text-xl md:text-2xl mb-8">Sua loja de confiança para produtos de alta qualidade para seu pet</p>
             <div className="flex justify-center gap-4">
               <Button asChild className="bg-white text-joy-orange hover:bg-gray-100 px-8 py-6 text-lg">
@@ -171,7 +171,7 @@ export default function SobrePage() {
 
               <motion.div variants={item} className="space-y-6">
                 <p className="text-lg text-gray-700">
-                  Fundada em 2020, a PetJoy nasceu do amor incondicional pelos animais e da paixão por proporcionar uma vida mais feliz e saudável para os nossos amigos de quatro patas.
+                  Fundada em 2020, a Focinhus nasceu do amor incondicional pelos animais e da paixão por proporcionar uma vida mais feliz e saudável para os nossos amigos de quatro patas.
                 </p>
                 <p className="text-lg text-gray-700">
                   Tudo começou com uma pequena loja física e o sonho de criar um espaço onde os tutores pudessem encontrar produtos de qualidade para seus pets, com atendimento personalizado e muito carinho.
