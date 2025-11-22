@@ -16,7 +16,7 @@ export default function AdminLayout() {
       <header className="bg-white shadow">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link to="/admin" className="font-bold text-xl text-deep-navy">Admin • PetJoyz</Link>
+            <Link to="/admin" className="font-bold text-xl text-deep-navy">Admin • Focinhus</Link>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={handleLogout} className="text-sm px-3 py-2 rounded-md bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center gap-2">

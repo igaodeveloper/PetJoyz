@@ -27,7 +27,7 @@ export default function Footer() {
                 placeholder="seu@email.com"
                 className="bg-soft-cream/10 border-soft-cream/20 text-soft-cream placeholder:text-soft-cream/50 focus:border-joy-orange"
               />
-              <Button className="bg-joy-orange text-white rounded-petjoy whitespace-nowrap" variants={buttonElevate} initial="rest" whileHover="hover" whileTap="tap">
+              <Button className="bg-joy-orange text-white rounded-petjoy whitespace-nowrap hover:bg-joy-orange/90 transition-colors">
                 Quero Descontos!
               </Button>
             </div>
@@ -45,7 +45,7 @@ export default function Footer() {
               <div className="w-10 h-10 bg-joy-orange rounded-full flex items-center justify-center">
                 <span className="text-2xl">🐾</span>
               </div>
-              <span className="font-primary font-bold text-xl">PetJoy</span>
+              <span className="font-primary font-bold text-xl">Focinhus</span>
             </div>
             <p className="text-soft-cream/70 text-sm mb-4">
               Espalhando alegria para pets e tutores desde 2024. Produtos selecionados com carinho para o bem-estar do seu melhor amigo.

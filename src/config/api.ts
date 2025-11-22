@@ -1,6 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_URL || 'https://api.petjoyz.com.br/api',
+  BASE_URL: import.meta.env.VITE_API_URL || 'https://api.focinhus.com.br/api',
   TIMEOUT: 10000, // 10 seconds
   // Add other API-related configurations here
 };

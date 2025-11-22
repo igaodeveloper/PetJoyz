@@ -1,8 +1,8 @@
-# 🐾 PetJoy - E-commerce para Produtos Pet
+# 🐾 Focinhus - E-commerce para Produtos Pet
 
-![PetJoy Logo](https://via.placeholder.com/150x50/FF9A3D/FFFFFF?text=PetJoy)
+![Focinhus Logo](https://via.placeholder.com/150x50/FF9A3D/FFFFFF?text=Focinhus)
 
-**PetJoy** é uma loja digital moderna e alegre, focada em produtos para pets. Com design cartoon premium, experiência responsiva e otimizada para conversão, acessibilidade e performance.
+**Focinhus** é uma loja digital moderna e alegre, focada em produtos para pets. Com design premium, experiência responsiva e otimizada para conversão, acessibilidade e performance.
 
 ---
 

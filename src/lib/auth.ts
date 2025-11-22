@@ -1,4 +1,4 @@
-export const AUTH_KEY = 'petjoyz_admin_token';
+export const AUTH_KEY = 'focinhus_admin_token';
 
 export function setAuthToken(token: string) {
   localStorage.setItem(AUTH_KEY, token);
